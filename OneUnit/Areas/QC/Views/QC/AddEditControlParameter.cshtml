@@ -1,0 +1,95 @@
+﻿@model ControlParameterViewModel
+
+<form asp-action="AddEditControlParameter" asp-area="QC" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} ControlParameter" })
+    <h1>ویرایش پارامتر کنترلی</h1>
+    <div class="well" align="right">
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Name)
+            @Html.EditorFor(n => n.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(n => n.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.ProcessType)
+            @Html.DropDownListFor(n => n.ProcessTypeId, new SelectList(ViewBag.ProcessType, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "ProcessType" , data_trigger = "click", onchange = "DateComparisionJavascriptFun();" })
+            @Html.ValidationMessageFor(n => n.ProcessTypeId, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.ProcessName)
+            @Html.DropDownListFor(n => n.ProcessNameId, new SelectList(ViewBag.ProcessName, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "ProcessType", data_trigger = "click", onchange = "DateComparisionJavascriptFun();" })
+            @Html.ValidationMessageFor(n => n.ProcessNameId, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.BottomLimit)
+            @Html.EditorFor(n => n.BottomLimit, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" , id = "BottomLimit" } })
+            @Html.ValidationMessageFor(n => n.BottomLimit, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.UpperLimit)
+            @Html.EditorFor(n => n.UpperLimit, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", id = "UpperLimit" } })
+            @Html.ValidationMessageFor(n => n.UpperLimit, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.DegreeOfImportance)
+            @Html.DropDownListFor(n => n.DegreeOfImportanceId, new SelectList(ViewBag.DegreeOfImportance, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.DegreeOfImportanceId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.UnitOfMeasurement)
+            @Html.DropDownListFor(n => n.UnitOfMeasurementId, new SelectList(ViewBag.UnitOfMeasurement, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.UnitOfMeasurementId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.SamplingLocation)
+            @Html.DropDownListFor(n => n.SamplingLocationId, new SelectList(ViewBag.SamplingLocation, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.SamplingLocationId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.SampleValue)
+            @Html.DropDownListFor(n => n.SampleValueId, new SelectList(ViewBag.SampleValue, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.SampleValueId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.TestValue)
+            @Html.DropDownListFor(n => n.TestValueId, new SelectList(ViewBag.TestValue, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.TestValueId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.RAction)
+            @Html.DropDownListFor(n => n.RActionId, new SelectList(ViewBag.OrganizationalUnit, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.RActionId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>
+
+<script type="text/javascript">
+
+    function DateComparisionJavascriptFun() {
+
+        var TempValue = document.getElementById('ProcessType').value;
+        if (TempValue ==2 )
+        {
+            //$("#ComboShift").val("1");
+            $('#BottomLimit').attr('readonly', false);
+            $('#UpperLimit').attr('readonly', false);
+            $('#Acceptablelimit').attr('readonly', true);
+        }
+        else if (TempValue == 1)
+        {
+            //$("#ComboShift").val("2");
+            $('#BottomLimit').attr('readonly', true);
+            $('#UpperLimit').attr('readonly', true);
+            $('#Acceptablelimit').attr('readonly', false);
+        }
+        else
+        {
+            $('#BottomLimit').attr('readonly', true);
+            $('#UpperLimit').attr('readonly', true);
+            $('#Acceptablelimit').attr('readonly', true);
+
+        }
+    }
+</script>
+

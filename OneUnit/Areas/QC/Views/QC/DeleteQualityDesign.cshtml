@@ -1,0 +1,12 @@
+﻿@model QualityDesignViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Delete QualityDesign" })
+
+    <div class="modal-body form-horizontal">
+         آیا برای برای حذف اطمینان دارید @Model.Id?
+    </div>
+
+    @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonText = "Delete" })
+}

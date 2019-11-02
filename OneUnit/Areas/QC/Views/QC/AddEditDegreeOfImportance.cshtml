@@ -1,0 +1,16 @@
+﻿@model DegreeOfImportanceViewModel
+
+<form asp-action="AddEditDegreeOfImportance" asp-area="QC" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} DegreeOfImportance" })
+    <h1>ویرایش درجه اهمیت</h1>
+    <div class="modal-body form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name" class="col-lg-3 col-sm-3 control-label"></label>
+            <div class="col-lg-6">
+                <input asp-for="Name" class="form-control" />
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>
+

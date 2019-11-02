@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\css\TimePicker\**" />
+    <Content Remove="wwwroot\css\TimePicker\**" />
+    <EmbeddedResource Remove="wwwroot\css\TimePicker\**" />
+    <None Remove="wwwroot\css\TimePicker\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190119155659_Migration00020.cs" />
+    <Compile Remove="Migrations\20190119155659_Migration00020.Designer.cs" />
+    <Compile Remove="Migrations\20190119163844_Migration00020.cs" />
+    <Compile Remove="Migrations\20190119163844_Migration00020.Designer.cs" />
+    <Compile Remove="Migrations\20190128085148_Migration00020.cs" />
+    <Compile Remove="Migrations\20190128085148_Migration00020.Designer.cs" />
+    <Compile Remove="Migrations\20190215122743_Migration00022.cs" />
+    <Compile Remove="Migrations\20190215122743_Migration00022.Designer.cs" />
+    <Compile Remove="Migrations\20190215140827_Migration00026.cs" />
+    <Compile Remove="Migrations\20190215140827_Migration00026.Designer.cs" />
+    <Compile Remove="Migrations\20190215141234_Migration00026.cs" />
+    <Compile Remove="Migrations\20190215141234_Migration00026.Designer.cs" />
+    <Compile Remove="Migrations\20190428140006_Migration00036.cs" />
+    <Compile Remove="Migrations\20190428140006_Migration00036.Designer.cs" />
+    <Compile Remove="Migrations\20190507060348_Migration00038.cs" />
+    <Compile Remove="Migrations\20190507060348_Migration00038.Designer.cs" />
+    <Compile Remove="Migrations\20190507060539_Migration00038.cs" />
+    <Compile Remove="Migrations\20190507060539_Migration00038.Designer.cs" />
+    <Compile Remove="Migrations\20190930064453_Migration00048.cs" />
+    <Compile Remove="Migrations\20190930064453_Migration00048.Designer.cs" />
+    <Compile Remove="Migrations\20191020093607_Migration00051.cs" />
+    <Compile Remove="Migrations\20191020093607_Migration00051.Designer.cs" />
+    <Compile Remove="Migrations\20191020094226_Migration00051.cs" />
+    <Compile Remove="Migrations\20191020094226_Migration00051.Designer.cs" />
+    <Compile Remove="Migrations\20191024132309_Migration00054.cs" />
+    <Compile Remove="Migrations\20191024132309_Migration00054.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\QC\Views\QC\AddEditQualityDesign.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="MD.PersianDateTime.Core" Version="2.3.5" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="PersianDateTime.Core" Version="1.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\QC\Content\" />
+    <Folder Include="Areas\QC\Scripts\" />
+    <Folder Include="Areas\Transit\AppFile\Image\" />
+    <Folder Include="Areas\Transit\Controllers\" />
+    <Folder Include="Areas\Transit\Models\" />
+    <Folder Include="wwwroot\Images\Transit\" />
+    <Folder Include="wwwroot\css\MdBootstrapPersianDateTimePicker\" />
+    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\js\MdBootstrapPersianDateTimePicker\" />
+    <Folder Include="wwwroot\js\TimePicker\images\" />
+    <Folder Include="wwwroot\Script1\" />
+    <Folder Include="wwwroot\Plugins\TimePicker\" />
+    <Folder Include="wwwroot\TransitApp\Image\" />
+  </ItemGroup>
+ <ItemGroup>
+   <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+ </ItemGroup>
+</Project>

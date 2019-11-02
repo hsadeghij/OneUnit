@@ -1,0 +1,113 @@
+﻿@model IEnumerable<QualityDesign>
+@{
+
+    ViewData["Title"] = "طرح کیفیت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="top-buffer"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head">طرح کیفیت</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="sr-only" for="exampleInput3">تاریخ</label>
+            <div class="input-group">
+                <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#exampleInput3">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+                <input type="text" class="form-control" id="exampleInput3" placeholder="تاریخ" data-targetselector="#exampleInput3" data-mddatetimepicker="true"
+                       data-placement="right" data-englishnumber="true" />
+
+            </div>
+        </div>
+        @*asp-action="DynamicFormQualityDesign" asp-area="QC"*@
+        <div class="btn-group">
+            <a id="btnSave" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunction();">
+                <i class="glyphicon glyphicon-plus"></i>  درج جدید
+
+            </a>
+        </div>
+        <div class="btn-group">
+            <a id="btnSavee" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunctionn();">
+                <i class="glyphicon glyphicon-plus"></i>  نمایش
+
+            </a>
+        </div>
+        <div class="top-buffer"></div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>نام شرکت</th>
+                    <th>تاریخ</th>
+                    <th>شیفت</th>
+                    <th>ساعت</th>
+                    <th>نام فرآیند</th>
+                    <th>محل نمونه برداری</th>
+                    <th>پارامتر کنترلی</th>
+                    <th>مقدار</th>
+                    <th>وضعیت پارامتر کیفی</th>
+                    <th>وضعیت تایید</th>
+                    <th>توضیحات</th>
+                </tr>
+            </thead>
+            <tbody id="contacts"></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-student", AreaLabeledId = "modal-action-student-label", Size = ModalSize.Medium })
+
+@section scripts
+    {
+    <script src="~/js/student-index.js" asp-append-version="true"></script>
+}
+
+<script type="text/javascript">
+    function theFunction() {
+        // return true or false, depending on whether you want to allow the `href` property to follow through or not
+        var DateInputLoad = $("#exampleInput3").val();
+        
+$.ajax({
+           type: 'POST',
+           dataType: 'json',
+           url: '@Url.Action("PassDate", "QC", new { Area = "QC" })',
+           data: { TempDate: DateInputLoad },
+           success: function (data) {
+               window.location.href = data;
+
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function theFunctionn() {
+       
+        $.ajax({
+           
+            type: "GET",
+            url: '@Url.Action("GetAllQualityDesignWithDate", "QC", new { Area = "QC" })',
+            data: { "DateQD": $('#exampleInput3').val() },
+            success: function (data) {
+                var row = "";
+                $.each(data, function (id, QualityDesign) {
+
+
+
+                    row += "<tr><td>" + QualityDesign.Company.Name + "</td>" + "<td>" + QualityDesign.DateQD + "</td>" + "<td>" + QualityDesign.Shift.Name + "</td>" + "<td>" + QualityDesign.RegistrationTime + "</td>" + "<td>" + QualityDesign.ProcessName.Name + "</td>" + "<td>" + QualityDesign.SamplingLocation.Name +"</td>" + "<td>" + QualityDesign.ControlParameter.Name + "</td>" + "<td>" + QualityDesign.ValueLimit + "</td>" + "<td>" + QualityDesign.QParameterStatus.Name + "</td>" + "<td>" + QualityDesign.Confirmation.Name + "</td>" +"<td>" + QualityDesign.Description + "</td>" +"</tr>"
+
+                });
+                $("#contacts").html(row);
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve books.');
+            }
+        });
+
+    }
+
+</script>

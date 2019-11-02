@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Master details entry form</h2>
+<div class="container">
+    <div class="master">
+        <h2>Order</h2>
+        <table class="table table-responsive">
+            <tr>
+
+                <td>تاریخ</td>
+                <td>
+                    <input type="text" id="orderDate" class="form-control" />
+                    <span class="error">Valid order date required (ex: MM-dd-yyyy)</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="details">
+        <h2>
+            Order items
+        </h2>
+        <table class="table table-responsive">
+            <tr>
+                <td>شیفت</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Rate</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="mycontainer" id="mainrow">
+                <td>
+                    <select id="Shift" class="Shift form-control"  onchange="LoadShift(this);">
+                        <option>انتخاب</option>
+                        <option>11انتخاب</option>
+                    </select>
+                    <span class="error">Select Shift</span>
+                </td>
+                <td>
+                    <select id="ProcessName" class="ProcessName form-control" onchange="LoadProcessName(this)">
+                        <option>Select</option>
+                        <option>Select1</option>
+                    </select>
+                    <span class="error">Select ProcessName</span>
+                </td>
+                <td>
+                    <select id="ControlParameter" class="ControlParameter form-control">
+                        <option>Select</option>
+                        <option>Select3</option>
+                    </select>
+                    <span class="error">Select ControlParameter</span>
+                </td>
+                <td>
+                    <input type="text" id="ValueLimit" class="ValueLimit form-control" />
+                    <span class="error">Valid ValueLimit required</span>
+                </td>
+                <td>
+                    <select id="QParameterStatus" class="QParameterStatus form-control" onchange="LoadQParameterStatus(this)">
+                        <option>Select</option>
+                    </select>
+                    <span class="error">Select QParameterStatus</span>
+                </td>
+                <td>
+                    <select id="Confirmation" class="Confirmation form-control" onchange="LoadConfirmation(this)">
+                        <option>Select</option>
+                    </select>
+                    <span class="error">Select Confirmation</span>
+                </td>
+                <td>
+                    <input type="button" id="add" value="add" style="width:80px" class="btn btn-success" />
+                </td>
+            </tr>
+        </table>
+        <div id="orderItems">
+            <table class="table table-responsive" id="orderdetailsItems"></table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="submit" type="button" value="Save Order" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+</div>
+
+<link href="~/Areas/QC/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Areas/QC/Scripts/myScripts.js"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#orderDate').datepicker({
+            dateFormat: 'mm-dd-yy'
+        })
+    })
+</script>
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+

@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container" style="font-family:'B Arabic Style' Nazanin">
+    <div class="details">
+        <h2>
+          ثبت کارمندان
+        </h2>
+        <table class="table table-responsive" style="width:1500px">
+            <thead>
+                <tr>
+                    <td id="lblFullName">نام و نام خانوادگی:</td>
+                    <td id="lblPersonalCode">کد پرسنلی:</td>
+                    <td id="lblNationalCode">کد ملی:</td>
+                    <td id="lblNationalCode">آدرس:</td>
+                    <td id="lblNationalCode">موبایل:</td>
+                    <td id="lblPost">پست:</td>
+                    <td id="lblImage">عکس:</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mycontainer" id="mainrow">
+                    <td style="width:300px">
+                        <input type="text" id="FullNameLoad" class="FullName form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="text" id="PersonalCodeLoad" class="PersonalCode form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="text" id="NationalCodeLoad" class="NationalCode form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="text" id="AddressLoad" class="Address form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="text" id="MobileLoad" class="Mobile form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="PostForLoad" class="Post form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:400px">
+                        <input type="file" id="ImageLoad" class="Image form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>             
+                    <td style="width:300px">
+                        <input type="button" id="add" value="اضافه" style="width:80px" class="btn btn-success" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="orderItems">
+            <table class="table table-responsive" id="orderdetailsItems" style="width:1500px">
+                <tbody></tbody>
+            </table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="btnSave" type="button" value="ذخیره" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+</div>
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+<script type="text/javascript">
+
+//-----------------------------------------------Post------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadPost(element) {
+        if (ValueList.length == 0) { 
+            //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetPostWithJson", "Transit", new { Area = "Transit" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                        renderLoad(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderLoad(element);
+           }
+    }
+
+    //--------------------------Common-------------------------------------------------------------
+    function renderLoad(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //---------------------------Add----------------------------------------------------
+    $('#add').click(function () {
+        //validation and add order items
+        var isAllValid = true;
+        //-------------1-1----------------
+        if (($('#FullNameLoad').val() == '')) {
+            isAllValid = false;
+            $('#FullNameLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#FullNameLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-------------2-2------------
+        if (($('#PersonalCodeLoad').val() == '')) {
+            isAllValid = false;
+            $('#PersonalCodeLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#PersonalCodeLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-------------3-3------------
+        if (($('#NationalCodeLoad').val() == '')) {
+            isAllValid = false;
+            $('#NationalCodeLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#NationalCodeLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-------------4-4------------
+        if (($('#AddressLoad').val() == '')) {
+            isAllValid = false;
+            $('#AddressLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#AddressLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-------------5-5------------
+        if (($('#MobileLoad').val() == '')) {
+            isAllValid = false;
+            $('#MobileLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#MobileLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-------------6-6------------
+        if ($('#PostForLoad').val() == "0") {
+            isAllValid = false;
+            $('#PostForLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#PostForLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //--------------7-7------------
+        if (($('#ImageLoad').val() == '')) {
+            isAllValid = false;
+            $('#ImageLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#ImageLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        if (isAllValid) {
+            var $newRow = $('#mainrow').clone().removeAttr('id');
+            $('.Post', $newRow).val($('#PostForLoad').val());
+            //Replace add button with remove button
+            $('#add', $newRow).addClass('remove').val('حذف').removeClass('btn-success').addClass('btn-danger');
+
+            //remove id attribute from new clone row
+            $('#PostForLoad,#add', $newRow).removeAttr('id');
+            $('span.error', $newRow).remove();
+            //append clone row
+            $('#orderdetailsItems').append($newRow);
+
+        }
+
+    })
+
+    //remove button click event
+    $('#orderdetailsItems').on('click', '.remove', function () {
+        $(this).parents('tr').remove();
+    });
+
+    //----------------------------------------Load---------------------------------------------------
+    LoadPost($('#PostForLoad'));
+    //-------------------------------------------------------------------------------------------
+
+</script>
+<script type="text/javascript">
+        //---------------------------------------Save---------------------------------------------------
+        $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+        var CPs = new Array();
+        $("#orderdetailsItems TBODY  TR").each(function () {
+            var row = $(this);
+            var CP = {};
+            
+            CP.FullName       = row.find("td:eq(0) input[type=text]").val();
+            CP.PersonalCode   = row.find("td:eq(1) input[type=text]").val();
+            CP.NationalCode   = row.find("td:eq(2) input[type=text]").val();
+            CP.Address        = row.find("td:eq(3) input[type=text]").val();
+            CP.Mobile         = row.find("td:eq(4) input[type=text]").val();
+            CP.PostId         = row.find("td:eq(5) option:selected").val();
+            CP.Image          = row.find("td:eq(6) option:selected").val();
+            CPs.push(CP);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url:  '@Url.Action("AddPersonList", "Transit", new { Area = "Transit" })',
+            data: JSON.stringify(CPs),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                alert("اطلاعات با موفقیت ثبت شد.");
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
+                }
+            }
+        });
+    });
+</script>

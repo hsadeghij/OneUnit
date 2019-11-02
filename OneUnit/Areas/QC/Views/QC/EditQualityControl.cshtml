@@ -1,0 +1,54 @@
+﻿@model QualityControlViewModel
+@{
+
+    ViewData["Title"] = "ویرایش کنترل کیفیت";
+
+}
+<h2>@ViewBag.Tilte</h2>
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+<div class="col-md-6 col-md-offset-3">
+    <div class="well">
+        <form asp-action="EditQualityControl" asp-area="QC" role="form">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Year)
+                    @Html.DropDownListFor(n => n.YearId, new SelectList(ViewBag.Year, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.YearId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Month)
+                    @Html.DropDownListFor(n => n.MonthId, new SelectList(ViewBag.Month, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.MonthId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Day)
+                    @Html.DropDownListFor(n => n.DayId, new SelectList(ViewBag.Day, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.DayId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Shift)
+                    @Html.DropDownListFor(n => n.ShiftId, new SelectList(ViewBag.Shift, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.ShiftId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Hour)
+                    @Html.DropDownListFor(n => n.HourId, new SelectList(ViewBag.Hour, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.HourId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.QualityDesign)
+                    @Html.DropDownListFor(n => n.QualityDesignId, new SelectList(ViewBag.QualityDesign, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(n => n.QualityDesignId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-envelope"></i>ثبت اطلاعات  </button>
+                    <div class="text-success">@ViewBag.UserMessage</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿@model CompanyViewModel
+
+<form asp-action="AddEditCompany" asp-area="QC" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} Company" })
+    <h1>شرکت</h1>
+    <div class="modal-body form-horizontal">
+        <div class="form-group">
+            <div class="well" align="right">
+                @Html.LabelFor(n => n.Site)
+                @Html.DropDownListFor(n => n.SiteId, new SelectList(ViewBag.Site,"Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+                @Html.ValidationMessageFor(n => n.SiteId, "", new { @class = "text-danger" })
+            </div>
+            <label asp-for="Name" class="col-lg-3 col-sm-3 control-label"></label>
+            <div class="col-lg-6">
+                <input asp-for="Name" class="form-control" />
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>
+

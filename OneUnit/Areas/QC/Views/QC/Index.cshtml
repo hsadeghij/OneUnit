@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "کنترل کیفیت";
+}
+<div class="row">
+    @*<div class="col-md-3">
+            <div class="product-info">
+                <img src="~/img/500.jpg" width="250" height="250" />
+                <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllQualityDesign">طرح کیفیت</a></h3>
+            </div>
+        </div>*@
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="QualityDesignForView">نمایش</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllQualityDesign">کنترل تولید</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/QualityDesign1.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllProcessName">نام فرآیند</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/ProcessType.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllProcessType">نوع فرآیند</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardP.png" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllControlParameter"> پارامتر کنترلی</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/1.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllDegreeOfImportance"> درجه اهمیت</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/UnitOfMeasurment.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllUnitOfMeasurement"> واحد اندازه گیری</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/SamplingLocation.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllSamplingLocation">محل نمونه برداری</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/SamplingFrequncy.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllSampleValue">مقدار نمونه</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/TestValue.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllTestValue">مقدار آزمونه</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllOrganizationalUnit">واحد سازمانی</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllTank">مخزن</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllStorage">Storage</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllProduction">نام محصول</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllShift">شیفت</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/office.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllColumnNumber">شماره ستون</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllQParameterStatus">وضعیت پارامتر کیفی</a></h3>
+        </div>
+    </div>
+
+    @*<div class="col-md-3">
+            <div class="product-info">
+                <img src="~/img/StandardA.jpg" width="250" height="250" />
+                <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="DynamicControlParameter">پارامتر کنترلی داینامیک</a></h3>
+            </div>
+        </div>*@
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllCompany">شرکت</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllSite">سایت</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllTypeOfCorn">نوع ذرت</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="product-info">
+            <img src="~/img/StandardA.jpg" width="250" height="250" />
+            <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllPauseTime">وقفه خط</a></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>

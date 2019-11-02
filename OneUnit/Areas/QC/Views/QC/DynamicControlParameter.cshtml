@@ -1,0 +1,725 @@
+﻿
+@{
+    ViewBag .Title = "Index";
+}
+
+<h2>طرح کیفیت</h2>
+<div class="container">
+    <div class="details">
+        <h2>
+            پارامترهای کنترلی
+        </h2>
+        <table class="table table-responsive"  style="width:1500px">
+            <thead>
+                <tr>
+                    <td id="lblCompany">نام شرکت</td>
+                    <td id="lblProcessName">نام فرآیند</td>
+                    <td id="lblCode">پارامتر کنترلی</td>
+                    <td id="lblShift">نوع فرایند</td>
+                    <td id="lblValueLimit">حد پایین</td>
+                    <td id="lblQParameterStatus">حد بالا</td>
+                    <td id="lblConfirmation">درجه اهمیت</td>
+                    <td id="lblConfirmation">واحد اندازه گیری</td>
+                    <td id="lblConfirmation">محل نمونه برداری</td>
+                    <td id="lblConfirmation">مقدار نمونه</td>
+                    <td id="lblConfirmation">مقدار آزمونه</td>
+                    <td id="lblConfirmation">مسئول اصلاح و اقدام</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mycontainer" id="mainrow">
+                    <td style="width:300px">
+                        <select id="CompanyForLoad" class="Company form-control" onchange="LoadProcessNameWithCompany(this);">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="ProcessNameForLoad" class="ProcessName form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="text" id="ControlParameterLoad" class="ControlParameter form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="ProcessTypeForLoad" class="ProcessType form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:200px">
+                        <input type="text" id="BottomLimitLoad" class="BottomLimit form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:200px">
+                        <input type="text" id="UpperLimitLoad" class="UpperLimit form-control" />
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="DegreeOfImportanceForLoad" class="DegreeOfImportance form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="UnitOfMeasurementForLoad" class="UnitOfMeasurement form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="SamplingLocationForLoad" class="SamplingLocation form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="SampleValueForLoad" class="SampleValue form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="TestValueForLoad" class="TestValue form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="OrganizationalUnitForLoad" class="OrganizationalUnit form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="button" id="add" value="add" style="width:80px" class="btn btn-success" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="orderItems">
+            <table class="table table-responsive" id="orderdetailsItems" style="width:1500px">
+                <tbody></tbody>
+            </table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="btnSave" type="button" value="Save Order" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+</div>
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+    
+</style>
+
+<script type="text/javascript">
+    //-----------------------------------------------Shifts------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadProcessType(element) {
+        if (ValueList.length == 0) {
+            //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetProcessTypeWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderShift(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+                renderShift(element);
+           }
+     }
+
+    function renderShift(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+        //----------------------------------------Company--------------------------------------------
+    var CompanyTypeIdState;
+    var Companys = []
+    //fetch Shifts from database
+    function LoadCompany(element) {
+
+        if (Companys.length == 0) {
+          
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompanyWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Companys = data;
+            //render catagory
+                renderCompany(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderCompany(element);
+            }
+            }
+
+    function renderCompany(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Companys, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------ProcessName------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadProcessName(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetProcessNameWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+     //--------------------------------ProcessNameWithCompany-&SamplingLocationWithCompany-----------------------------------
+    //fetch ControlParameter
+    function LoadProcessNameWithCompany(ProcessNameWithCompanyDD) {
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetProcessNameWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#ProcessNameForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        })
+            $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetSamplingLocationWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#SamplingLocationForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+}
+
+    function renderProcessName(element, data) {
+    //render ControlParameter
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+  
+
+ //-----------------------------------------------DegreeOfImportance------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadDegreeOfImportance(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetDegreeOfImportanceWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+            //-----------------------------------------------UnitOfMeasurement------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadUnitOfMeasurement(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetUnitOfMeasurementWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+                //-----------------------------------------------SamplingLocation------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadSamplingLocation(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetSamplingLocationWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+                    //-----------------------------------------------SampleValue------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadSampleValue(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetSampleValueWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+    //-----------------------------------------------TestValue------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadTestValue(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetTestValueWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------
+        //-----------------------------------------------TestValue------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadTestValue(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetTestValueWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------------------------------------------------
+            //-----------------------------------------------OrganizationalUnit------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadOrganizationalUnit(element)
+     {
+        if (ValueList.length == 0)
+          {
+                //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetOrganizationalUnitWithJson", "QC", new { Area = "QC" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                      renderFill(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderFill(element);
+           }
+     }
+
+    function renderFill(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------------------------------------------------
+    LoadProcessType($('#ProcessTypeForLoad'));
+    LoadProcessName($('#ProcessNameForLoad'));
+    LoadDegreeOfImportance($('#DegreeOfImportanceForLoad'));
+    LoadUnitOfMeasurement($('#UnitOfMeasurementForLoad'));
+    LoadSamplingLocation($('#SamplingLocationForLoad'));
+    LoadSampleValue($('#SampleValueForLoad'));
+    LoadTestValue($('#TestValueForLoad'));
+    LoadOrganizationalUnit($('#OrganizationalUnitForLoad'));
+    LoadCompany($('#CompanyForLoad'));
+    //-------------------------------------------------------------------------------------
+
+    $('#add').click(function () {
+        //validation and add order items
+        var isAllValid = true;
+        //-------------1----------------
+        if (($('#ControlParameterLoad').val() == '' )) {
+            isAllValid = false;
+            $('#ControlParameterLoad').siblings('span.error').css('visibility', 'visible');
+            }
+             else {
+            $('#ControlParameterLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //--------------2-------------
+            if ($('#ProcessTypeForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ProcessTypeForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+            $('#ProcessTypeForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //--------------3-------------
+            if ($('#ProcessNameForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //-------------4----------------
+            if ($('#DegreeOfImportanceForLoad').val() == "0") {
+                isAllValid = false;
+                $('#DegreeOfImportanceForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#DegreeOfImportanceForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //------------5------------
+            if ($('#UnitOfMeasurementForLoad').val() == "0") {
+                isAllValid = false;
+                $('#UnitOfMeasurementForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#UnitOfMeasurementForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //------------6-----------
+            if ($('#SamplingLocationForLoad').val() == "0") {
+                isAllValid = false;
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //-----------7------------
+            if ($('#SampleValueForLoad').val() == "0") {
+                isAllValid = false;
+                $('#SampleValueForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#SampleValueForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //-----------8-----------
+            if ($('#TestValueForLoad').val() == "0") {
+                isAllValid = false;
+                $('#TestValueForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#TestValueForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //----------9------------
+            if ($('#OrganizationalUnitForLoad').val() == "0") {
+                isAllValid = false;
+                $('#OrganizationalUnitForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#OrganizationalUnitForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        //-----------10------------
+            if (!($('#BottomLimitLoad').val().trim() != '' && !isNaN($('#BottomLimitLoad').val().trim()))) {
+                isAllValid = false;
+                $('#BottomLimitLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#BottomLimitLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+
+        //-----------11------------
+            if (!($('#UpperLimitLoad').val().trim() != '' && !isNaN($('#UpperLimitLoad').val().trim()))) {
+                isAllValid = false;
+                $('#UpperLimitLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#UpperLimitLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //--------12-------------
+        if ($('#CompanyForLoad').val() == "0") {
+            isAllValid = false;
+            $('#CompanyForLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#CompanyForLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+
+        if (isAllValid) {
+            var $newRow = $('#mainrow').clone().removeAttr('id');
+            $('.ProcessType', $newRow).val($('#ProcessTypeForLoad').val());
+            $('.ProcessName', $newRow).val($('#ProcessNameForLoad').val());
+            $('.DegreeOfImportance', $newRow).val($('#DegreeOfImportanceForLoad').val());
+            $('.UnitOfMeasurement', $newRow).val($('#UnitOfMeasurementForLoad').val());
+            $('.SamplingLocation', $newRow).val($('#SamplingLocationForLoad').val());
+            $('.SampleValue', $newRow).val($('#SampleValueForLoad').val());
+            $('.TestValue', $newRow).val($('#TestValueForLoad').val());
+            $('.OrganizationalUnit', $newRow).val($('#OrganizationalUnitForLoad').val());
+            $('.Company', $newRow).val($('#CompanyForLoad').val());
+            //Replace add button with remove button
+            $('#add', $newRow).addClass('remove').val('حذف').removeClass('btn-success').addClass('btn-danger');
+
+            //remove id attribute from new clone row
+            $('#CompanyForLoad,#ProcessTypeForLoad,#ProcessNameForLoad,#DegreeOfImportanceForLoad,#UnitOfMeasurementForLoad,#SamplingLocationForLoad,#SampleValueForLoad,#TestValueForLoad,OrganizationalUnitForLoad,BottomLimitLoad,UpperLimitLoad,ControlParameterLoad,#add', $newRow).removeAttr('id');
+            $('span.error', $newRow).remove();
+            //append clone row
+            $('#orderdetailsItems').append($newRow);
+
+            //clear select data
+            //$('#ProcessTypeForLoad,#ProcessNameForLoad,#DegreeOfImportanceForLoad,#UnitOfMeasurementForLoad,#SamplingLocationForLoad,#SampleValueForLoad,#TestValueForLoad,OrganizationalUnitForLoad').val('0');
+            //$('#BottomLimitLoad').val('');
+            //$('#UpperLimitLoad').val('');
+            //$('#ControlParameterLoad').val('');
+            //$('#orderItemError').empty();
+        }
+
+    })
+
+    //remove button click event
+    $('#orderdetailsItems').on('click', '.remove', function () {
+        $(this).parents('tr').remove();
+    });
+</script> 
+
+<script type="text/javascript">
+
+    $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+        var CPs = new Array();
+        $("#orderdetailsItems TBODY  TR").each(function () {
+            var row = $(this);
+            var CP = {};
+            CP.CompanyId            = row.find("td:eq(0) option:selected").val();
+            CP.ProcessNameId        = row.find("td:eq(1) option:selected").val();
+            CP.Name                 = row.find("td:eq(2) input[type=text]").val();
+            CP.ProcessTypeId        = row.find("td:eq(3) option:selected").val();
+            CP.BottomLimit          = row.find("td:eq(4) input[type=text]").val();
+            CP.UpperLimit           = row.find("td:eq(5) input[type=text]").val();
+            CP.DegreeOfImportanceId = row.find("td:eq(6) option:selected").val();
+            CP.UnitOfMeasurementId  = row.find("td:eq(7) option:selected").val();           
+            CP.SamplingLocationId   = row.find("td:eq(8) option:selected").val();
+            CP.SampleValueId        = row.find("td:eq(9) option:selected").val();
+            CP.TestValueId          = row.find("td:eq(10) option:selected").val();
+            CP.RActionId            = row.find("td:eq(11) option:selected").val();
+            CPs.push(CP);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url:  '@Url.Action("AddControlParameterList", "QC", new { Area = "QC" })',
+            data: JSON.stringify(CPs),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                alert("اطلاعات با موفقیت ثبت شد.");
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
+                }
+            }
+        });
+    });
+</script> 

@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>وقفه خط </h2>
+<div class="container">
+    <div class="master">
+        <h2>تاریخ</h2>
+        <h1>@TempData["PassDateForPauseTime"] </h1>
+        <input type="text" name="PassDate" id="PassDate" value=@TempData["PassDateForPauseTime"].ToString()>
+    </div>
+    <div class="details">
+        <h2>
+            وقفه خط
+        </h2>
+        <table class="table table-responsive" style="width:1500px">
+            <thead>
+                <tr>
+                    <td id="lblProcessName">مدت وقفه </td>
+                </tr>
+                <tr>
+                    <td id="lblProcessName">سایت </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mycontainer" id="mainrow">
+                    <td style="width:300px">
+                        <select id="HourForLoad" class="Hour form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="CompanyForLoad" class="Company form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="button" id="add" value="add" style="width:80px" class="btn btn-success" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="orderItems">
+            <table class="table table-responsive" id="orderdetailsItems" style="width:1500px">
+                <tbody></tbody>
+            </table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="btnSave" type="button" value="Save Order" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+</div>
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+<script type="text/javascript">
+
+        //----------------------------------------Hour--------------------------------------------
+    var HourTypeIdState;
+    var Hours = []
+    //fetch Shifts from database
+    function LoadHour(element) {
+
+        if (Hours.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetHourWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Hours = data;
+            //render catagory
+                renderHour(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderHour(element);
+            }
+            }
+
+    function renderHour(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Hours, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    
+    //----------------------------------------------------------------------------------
+            //----------------------------------------Company--------------------------------------------
+
+    var Companies = []
+    //fetch Shifts from database
+    function LoadCompany(element) {
+
+        if (Companies.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompanyWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Companies = data;
+            //render catagory
+                renderCompany(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderCompany(element);
+            }
+            }
+
+    function renderCompany(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+        $.each(Companies, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    
+    //----------------------------------------------------------------------------------
+
+    $('#add').click(function () {
+        //validation and add order items
+        var isAllValid = true;
+        //-------------1----------------
+        if (($('#HourForLoad').val() == '' )) {
+            isAllValid = false;
+            $('#HourForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+             else {
+            $('#HourForLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+ 
+
+        if (isAllValid) {
+            var $newRow = $('#mainrow').clone().removeAttr('id');
+            $('.Hour', $newRow).val($('#HourForLoad').val());
+            //Replace add button with remove button
+            $('#add', $newRow).addClass('remove').val('حذف').removeClass('btn-success').addClass('btn-danger');
+
+            //remove id attribute from new clone row
+            $('#HourForLoad', $newRow).removeAttr('id');
+            $('span.error', $newRow).remove();
+            //append clone row
+            $('#orderdetailsItems').append($newRow);
+
+        }
+
+    })
+
+    //remove button click event
+    $('#orderdetailsItems').on('click', '.remove', function () {
+        $(this).parents('tr').remove();
+    });
+</script>
+
+<script type="text/javascript">
+
+    $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+
+        var CPs = new Array();
+        $("#orderdetailsItems TBODY  TR").each(function () {
+            var row = $(this);
+            var CP = {};
+            CP.BreakDate = $('#PassDate').val();
+            CP.HourId    = row.find("td:eq(0) option:selected").val();
+            CPs.push(CP);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url:  '@Url.Action("AddPauseTimeList", "QC", new { Area = "QC" })',
+            data: JSON.stringify(CPs),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                alert("اطلاعات با موفقیت ثبت شد.");
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
+                }
+            }
+        });
+    });
+    LoadHour($('#HourForLoad'));
+    LoadCompany($('#CompanyForLoad'));
+</script> 

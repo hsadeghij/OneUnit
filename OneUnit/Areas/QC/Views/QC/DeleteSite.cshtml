@@ -1,0 +1,13 @@
+﻿@model SiteViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Delete Site" })
+
+    <div class="modal-body form-horizontal">
+        آیا برای برای حذف اطمینان دارید @Model.Name?
+    </div>
+
+    @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonText = "Delete" })
+}
+

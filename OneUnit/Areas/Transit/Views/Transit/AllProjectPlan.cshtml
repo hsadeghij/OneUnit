@@ -1,0 +1,147 @@
+﻿@model IEnumerable<ProjectPlan>
+@{
+
+    ViewData["Title"] = "اطلاعات پروژه";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<div class="top-buffer">
+    <select id="ProjectForLoad" class="Company form-control" onchange="LoadProcessNameWithCompany();">
+        <option>انتخاب</option>
+    </select>
+    <span class="error">مقدار وارد کنید</span>
+</div>*@
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head">اطلاعات پروژه</div>
+    <div class="panel-body">
+        <div class="btn-group">
+            <a id="createEditStudentModal" data-toggle="modal" asp-action="AddEditProjectPlan" asp-area="Transit" data-target="#modal-action-student" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus"></i>  درج جدید
+        </a>
+            @*<i class="glyphicon glyphicon-plus"></i> @Html.ActionLink("درج جدید", "AddEditProjectPlan", "Transit", new {Id=0,  Value = ViewBag.Value }, null)*@
+        </div>
+        <div class="top-buffer"></div>
+        <form role="form">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>نام پروژه</th>
+                        <th>نام پیمانکار</th>
+                        <th>فعالیت</th>
+                        <th>توضیحات</th>
+                        <th>نوع کار</th>
+                        <td>سرپرستان</td>
+                        <td>استادکاران </td>
+                        <td>کارگران</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Person.FullName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Activity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.WorkType.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SarparastList)</td>
+                        <td>@Html.DisplayFor(modelItem => item.OstadKarList)</td>
+                        <td>@Html.DisplayFor(modelItem => item.WorkerList)</td>
+                        <td>
+                            <a id="editStudentModal" data-toggle="modal" asp-action="AddEditProjectPlan" asp-area="Transit" asp-route-id="@item.Id" data-target="#modal-action-student"
+                               class="btn btn-info">
+                                <i class="glyphicon glyphicon-pencil"></i>  ویرایش
+                            </a>
+                            @*<i class="glyphicon glyphicon-plus"></i> @Html.ActionLink("درج جدید", "AddEditProjectPlan", "Transit", new { Id = 0, Value = ViewBag.Value }, null)*@
+                            <a id="deleteStudentModal" data-toggle="modal" asp-action="DeleteProjectPlan" asp-area="Transit" asp-route-id="@item.Id" data-target="#modal-action-student" class="btn btn-danger">
+                                <i class="glyphicon glyphicon-trash"></i>  حذف
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-student", AreaLabeledId = "modal-action-student-label", Size = ModalSize.Medium })
+
+@section JavaScriptIncludes
+    {
+
+    <link href="~/css/Chosen/docsupport/style.css" rel="stylesheet" />
+    <link href="~/css/Chosen/docsupport/prism.css" rel="stylesheet" />
+    <link href="~/css/Chosen/chosen.css" rel="stylesheet" />
+
+}
+
+
+    <script type="text/javascript">
+
+
+    var CompanyTypeIdState;
+    var Companys = []
+    //fetch Shifts from database
+    function LoadCompany(element) {
+
+        if (Companys.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetProjectWithJson", "Transit", new { Area = "Transit" })',
+                success: function (data) {
+                Companys = data;
+                //render catagory
+                renderCompany(element);
+                }
+                })
+                }
+                else {
+                //render catagory to the element
+                renderCompany(element);
+                }
+                }
+
+                function renderCompany(element) {
+                var $ele = $(element);
+                $ele.empty();
+                $ele.append($('<option />').val('0').text('انتخاب'));
+                $.each(Companys, function (i, val) {
+                $ele.append($('<option />').val(val.Id).text(val.Name));
+                })
+    }
+
+
+
+
+    @*function LoadProcessNameWithCompany(ProcessNameWithCompanyDD) {
+    $.ajax({
+        type: "Get",
+        url: '@Url.Action("AllProjectPlan", "Transit", new { Area = "Transit" })',
+        data: { 'value': $('#ProjectForLoad').val()},
+        success: function (data) {
+            window.location.reload();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        })
+}*@
+
+    function LoadProcessNameWithCompany() {
+        //window.location.href = "";
+        //window.location.href = 'AllProjectPlan/' + $('#ProjectForLoad').val();
+
+        var url = '@Url.Action("AllProjectPlan","Transit", new { Id = "__Id__" })';
+
+        window.location.href = url.replace('__Id__', $('#ProjectForLoad').val());
+
+                 $('#@(ViewBag.Value)').val() = $('#ProjectForLoad').val();
+
+
+        }
+
+    LoadCompany($('#ProjectForLoad'));
+    </script>

@@ -1,0 +1,20 @@
+﻿@model QParameterStatusViewModel
+
+<form asp-action="AddEditQParameterStatus" asp-area="QC" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} QParameterStatus" })
+    <h1>ویرایش وضعیت پارامترهای کیفی</h1>
+    <div class="well" align="right">
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Name)
+            @Html.EditorFor(n => n.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(n => n.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Confirmation)
+            @Html.DropDownListFor(n => n.ConfirmationId, new SelectList(ViewBag.Confirmation, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.ConfirmationId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>
+

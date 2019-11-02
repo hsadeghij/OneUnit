@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "کنترل کیفیت";
+}
+@model ProjectPlanViewModel
+<div class="row">
+
+    @*<div class="col-md-3">
+            <div class="product-info">
+                <img src="~/img/StandardA.jpg" width="250" height="250" />
+                <h3 style="text-align:center"><a asp-controller="Transit" asp-area="QC" asp-action="QualityDesignForView">نمایش</a></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="product-info">
+                <img src="~/img/StandardA.jpg" width="250" height="250" />
+                <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllQualityDesign">کنترل تولید</a></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="product-info">
+                <img src="~/img/QualityDesign1.jpg" width="250" height="250" />
+                <h3 style="text-align:center"><a asp-controller="QC" asp-area="QC" asp-action="AllProcessName">نام فرآیند</a></h3>
+            </div>
+        </div>*@
+    <div class="form-group">
+        @Html.LabelFor(n => n.Project)
+        @Html.DropDownListFor(n => n.ProjectId, new SelectList(ViewBag.Project, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "projectId" })
+        @Html.ValidationMessageFor(n => n.ProjectId, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-3">
+        <div class="btn-group">
+            <a id="btnSave" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunction();">
+                <i class="glyphicon glyphicon-plus"></i>  درج جدید
+
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function theFunction() {
+        // return true or false, depending on whether you want to allow the `href` property to follow through or not
+        var DateInputLoad = $("#projectId").val();
+
+$.ajax({
+           type: 'POST',
+           dataType: 'json',
+           url: '@Url.Action("PassDate", "Transit", new { Area = "Transit" })',
+           data: { TempDate: DateInputLoad },
+           success: function (data) {
+               window.location.href = data;
+
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+        });
+    }
+</script>

@@ -1,0 +1,132 @@
+﻿@using System.Security.Claims
+@using System.Threading.Tasks
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+
+
+@inject SignInManager<StoreUser> SignInManager
+@inject IAuthorizationService AuthorizationService
+@inject UserManager<StoreUser> UserManager
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>گروه صنعتی زر @ViewBag.Title</title>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-rtl.css" rel="stylesheet" />
+    <link href="~/css/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+
+
+
+    <link href="~/js/TimePicker/css/timepicki.css" rel="stylesheet" />
+    @* کد زیر برای ساعت می باشد *@
+    <link href="~/css/Time/timepicker.min.css" rel="stylesheet" />
+
+
+    <environment names="Production">
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/js/TimePicker/js/timepicki.js"></script>
+        @* کد زیر برای ساعت می باشد *@
+        <script src="~/js/TimeList/timepicker.min.js"></script>
+
+        @*<script src="~/Scripts/myScripts.js"></script>*@
+
+    </environment>
+
+</head>
+<body>
+    <div class="navbar navbar-default">
+        <div class="col-md-6"><span class="pull-right"></span></div>
+        <header class="container">
+
+            <div id="menu" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+
+                    <li><a asp-controller="App" asp-action="Contact">ارتباط با </a></li>
+                    <li><a asp-controller="App" asp-action="Shop">درباره ما</a></li>
+                    <li><a asp-controller="Account" asp-area="Admin" asp-action="Login">کنترل کیفیت</a></li>
+                    <li><a asp-controller="QC" asp-area="QC" asp-action="Index">صفحه ای اصلی</a></li>
+                    <li><a asp-controller="Transit" asp-area="Transit" asp-action="Index">تردد پیمانکاران</a></li>
+                    @*@if (User.Identity.IsAuthenticated)
+        {
+            <li><a asp-controller="Account" asp-area="Admin" asp-action="Logout">خروج</a></li>
+
+        }
+        else
+        {
+            <li><a asp-controller="Account" asp-area="Admin" asp-action="Login">ورود</a></li>
+
+        }*@
+                    @*&& User.IsInRole("Administrators")*@
+                    @*@if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrators"))
+        {
+            @await Component.InvokeAsync("AdminMenu")
+
+            <li class="dropdown">
+                <a asp-controller="PieManagement"
+                   asp-action="Index">Pie Management</a>
+            </li>
+            <li><a asp-controller="QC" asp-area="QC" asp-action="AllQualityControl">کنترل کیفیت</a></li>
+
+
+        }*@
+
+                </ul>
+
+                <div class="navbar-header">
+                    <div class="navbar-brand">گروه صنعتی زر <i class="fa fa-check "></i></div>
+                    <button class="navbar-toggle" data-toggle="collapse" data-target="#menu">&#9776;</button>
+                </div>
+                @await Html.PartialAsync("LoginPartial")
+            </div>
+        </header>
+    </div>
+    @*<section class="container">
+            <h2 class="text-center">@ViewBag.Title</h2>
+            @RenderBody()
+        </section>*@
+    <div class="container body-content" style="margin-right:0px;">
+        @RenderBody()
+        <hr />
+    </div>
+    <footer>
+        <div class="text-center">
+            Copyright 2018 ZarGroup
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/index.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/student-index.js"></script>
+    <script src="~/js/MdBootstrapPersianDateTimePicker/jalaali.js"></script>
+    <script src="~/js/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+
+
+
+    @* کد زیر برای ساعت می باشد *@
+
+    <script>
+        var timepicker = new TimePicker('RegistrationTimeLoad', {
+            lang: 'en',
+            theme: 'dark'
+        });
+        timepicker.on('change', function (evt) {
+
+            var value = (evt.hour || '00') + ':' + (evt.minute || '00');
+            evt.element.value = value;
+
+        });
+    </script>
+
+    @RenderSection("JavaScriptIncludes", required: false)
+    @RenderSection("scripts", false)
+
+</body>
+</html>

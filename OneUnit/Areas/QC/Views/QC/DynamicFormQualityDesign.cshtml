@@ -1,0 +1,1354 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>طرح کیفیت</h2>
+<p>
+    @ViewBag.DateForQualityDesign
+</p>
+<div class="container"  style="margin-right:0px;padding-right:0px">
+    <div class="master">
+
+        <h2>تاریخ</h2>
+
+        <h1>@TempData["PassDate"] </h1>
+        <input type="text" name="PassDate" id="PassDate" value=@TempData["PassDate"].ToString()>
+    </div>
+
+    <div class="details" style="margin-right:0px;padding-right:0px">
+        <h2>
+            پارامترهای کنترلی
+        </h2>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+
+
+                </tr>
+            </thead>
+            <tbody style="font-family:'B Nazanin';font-size:10px;">
+                <tr>
+                    <td>
+                        <label>  </label>
+                        <input type="button" id="add" value="اضافه" style="width:80px" class="btn btn-success" />
+                    </td>
+                </tr>
+                <tr class="mycontainer" id="mainrow">
+                    <td style="width:100px;">
+                        <label>شرکت</label>
+                        <select id="CompanyForLoad" class="Company form-control" onchange="LoadProcessNameWithCompany(this);" style="width:90px">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Company</span>
+                    </td>
+
+                    <td style="width:90px;">
+                        <label>شیفت</label>
+                        <select id="ShiftForLoad" class="Shift form-control" style="width:60px;font-size:14px;margin-right:1px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Shift</span>
+                    </td>
+                    <td style="direction:ltr;text-align:left;">
+                        <label>ساعت</label>
+                        <input type="text" id="RegistrationTimeLoad" placeholder="زمان" style="width:45px;font-size:14px;font-family:'B Nazanin'">
+                        <span class="error">Valid time required</span>
+                    </td>
+                    <td>
+                        <label>نام فرآیند</label>
+                        <select id="ProcessNameForLoad" class="ProcessName form-control" style="width:125px;font-size:14px;" onchange="LoadSampelingLocationWithProcessName(this);">
+                            <option>انتخاب</option>
+
+                        </select>
+                        <span class="error">Select ProcessName</span>
+                    </td>
+                    <td>
+                        <label>محل نمونه برداری</label>
+                        <select id="SamplingLocationForLoad" class="SamplingLocation form-control" onchange="LoadControlParameter(this);" style="width:100px;font-size:14px;">
+                            <option>انتخاب</option>
+
+                        </select>
+                        <span class="error">Select SamplingLocation</span>
+                    </td>
+                    <td>
+                        <label>پارامتر کنترلی</label>
+                        <select id="ControlParameterLoad" class="ControlParameter form-control" style="width:140px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select ControlParameter</span>
+                    </td>
+                    <td>
+                        <label>مقدار</label>
+                        <input type="text" id="ValueLimit" class="ValueLimit form-control" style="width:50px;font-size:14px;" />
+                        <span class="error">Valid ValueLimit required</span>
+                    </td>
+                    <td>
+                        <label>Storage هدف</label>
+                        <select id="StorageForLoad" class="Storage form-control" style="width:70px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Storage</span>
+                    </td>
+                    <td>
+                        <label>دقیقه</label>
+                        <select id="TransferTimeToStorageMinuteLoad" class="TransferTimeToStorageMinute form-control" style="width:60px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Minute</span>
+                    </td>
+                    <td>
+                        <label>ساعت</label>
+                        <select id="TransferTimeToStorageHourLoad" class="TransferTimeToStorageHour form-control" style="width:60px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Hour</span>
+                    </td>
+
+                    <td>
+                        <label> پارامتر کیفی</label>
+                        <select id="QParameterStatusLoad" class="QParameterStatus form-control" style="width:90px;font-size:14px;">
+                            <option>انتخاب</option>;
+                        </select>
+                        <span class="error">Select QParameterStatus</span>
+                    </td>
+                    <td>
+                        <label>وضعیت</label>
+                        <select id="ConfirmationLoad" class="Confirmation form-control" style="width:90px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select Confirmation</span>
+                    </td>
+                    <td>
+                        <label>توضیحات</label>
+                        <input type="text" id="DescriptionLoad" class="Description form-control" style="width:100px;font-size:14px;" />
+                        <span class="error">Valid Description required</span>
+                    </td>
+                    <td>
+                        <label>نوع ذرت</label>
+                        <select id="TypeOfCornLoad" class="TypeOfCorn form-control" style="width:90px;font-size:14px;">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">Select TypeOfCorn</span>
+                    </td>
+                    <td>
+
+                        <input type="button" id="Delete" value="" style="width:80px;display: none;" class="btn btn-success" />
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div id="orderItems" style="font-size:8px">
+            <table class="table table-responsive" id="orderdetailsItems">
+                <tbody></tbody>
+            </table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="btnSave" type="button" value="ذخیره نهایی" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+<script type="text/javascript">
+//-----------------------------------------------Shifts------------------------------------------------------
+    var ProcessTypeIdState;
+    var Shifts = []
+    //fetch Shifts from database
+    function LoadShift(element) {
+        if (Shifts.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetShiftWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+            Shifts = data;
+            //render catagory
+            renderShift(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderShift(element);
+            }
+            }
+
+            function renderShift(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Shifts, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------Hour-----------------------------------------------
+    var Hours = []
+    //fetch Shifts from database
+    function LoadHour(element) {
+        if (Hours.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetHourWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+             Hours = data;
+            //render catagory
+            renderHour(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderHour(element);
+            }
+            }
+
+            function renderHour(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Hours, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+        //----------------------------------------Minute-----------------------------------------------
+    var Minutes = []
+    //fetch Shifts from database
+    function LoadMinute(element) {
+        if (Minutes.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetMinuteWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+             Minutes = data;
+            //render catagory
+            renderMinute(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderMinute(element);
+            }
+            }
+
+    function renderMinute(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Minutes, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------Storage--------------------------------------------
+    var StorageIdState;
+    var Storages = []
+    //fetch Shifts from database
+    function LoadStorage(element) {
+        if (Storages.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStorageWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Storages = data;
+            //render catagory
+                renderStorages(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderStorages(element);
+            }
+            }
+
+    function renderStorages(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+        $.each(Storages, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------Company--------------------------------------------
+    var CompanyTypeIdState;
+    var Companys = []
+    //fetch Shifts from database
+    function LoadCompany(element) {
+
+        if (Companys.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompanyWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Companys = data;
+            //render catagory
+                renderCompany(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderCompany(element);
+            }
+            }
+
+    function renderCompany(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Companys, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //----------------------------------------SamplingLocation-----------------------------------
+        var ProcessTypeIdState;
+        var SamplingLocations = []
+    //fetch Shifts from database
+        function LoadSamplingLocation(element) {
+            if (SamplingLocations.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetSamplingLocationWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+            Shifts = data;
+            //render catagory
+            renderShift(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderShift(element);
+            }
+            }
+
+            function renderShift(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Shifts, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+
+    //----------------------------------------------ProcessNames---------------------------------
+
+//fetch ProcessName from database
+function LoadProcessName(element) {
+
+        //ajax function for fetch data
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetProcessNameWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+
+                //render catagory
+                renderProcessName($('#ProcessNameForLoad'), data);
+            }
+            ,
+            error: function (error) {
+                console.log(error);
+            }
+        })
+
+
+}
+
+    function renderProcessName(element, data) {
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //-------------------------------------------------------------------------------------------------------
+    //----------------------------------------------ControlParameter-----------------------------------------
+
+//fetch ControlParameter
+function LoadControlParameter(ProcessNameDD) {
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetControlParameterWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#ProcessNameForLoad').val(), 'Value2': $('#SamplingLocationForLoad').val() },
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderControlParameter($('#ControlParameterLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+    }
+
+    function renderControlParameter(element, data) {
+        //render ControlParameter
+        var $ele = $(element);
+        $ele.empty();
+        $ele.append($('<option/>').val('0').text('انتخاب'));
+        $.each(data, function (i, val) {
+            $ele.append($('<option/>').val(val.Id).text(val.Name));
+        })
+    }
+    function GetQualityDesignForTypeOfCorn(ProcessNameDD) {
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetQualityDesignForTypeOfCorn", "QC", new { Area = "QC" })',
+        data: { 'dateCurrnet': $('#PassDate').val(), 'typeOfCornId': $('#TypeOfCornLoad').val() },
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            RenderTypeOfCornLoad($('#TypeOfCornLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+}
+    function RenderTypeOfCornLoad(element, data) {
+    //render ControlParameter
+    var $ele = $(element);
+  //  $ele.empty();
+   // $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        //$ele.append($('<option/>').val(val.Id).text(val.TypeOfCornId));
+        $('#TypeOfCornLoad').val(val.TypeOfCornId);
+        })
+
+    }
+
+  //------------------------------------------------------------------------------------------------
+  //--------------------------------ProcessNameWithCompany------------------------------------------
+    //fetch ControlParameter
+function LoadProcessNameWithCompany(ProcessNameWithCompanyDD) {
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetProcessNameWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#ProcessNameForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+
+      $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetSamplingLocationWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#SamplingLocationForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+
+
+
+}
+
+    function renderProcessName(element, data) {
+    //render ControlParameter
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //--------------------------------------SampelingLocationWithProcessName--------------------------------
+
+    function LoadSampelingLocationWithProcessName(SampelingLocationWithProcessNameDD) {
+
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetSamplingLocationWithProcessNameWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#ProcessNameForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#SamplingLocationForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        })
+
+        FuncGetOneRecoredWithProcessNameId($("#ProcessNameForLoad").val());
+    }
+    var HasTIdState;
+    function FuncGetOneRecoredWithProcessNameId(selectedProcessNameValue) {
+                //---------کد زیر  برای مشخص کردن فرایندهای کا داری استورج هستند استفاده می شود--------------
+
+        //alert(selectedControlParameter);
+         $.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithProcessNameId", "QC", new { Area = "QC" })',
+             data: { Id: selectedProcessNameValue },
+           success: function (Data) {
+               HasTIdState = Data.HasTId;
+               if (Data.HasTId == 0)
+               {
+
+                   $("#TransferTimeToStorageMinuteLoad").hide();
+                   $("#TransferTimeToStorageHourLoad").hide();
+                   $("#StorageForLoad").hide();;
+                   //$("#lblStorage").text("              ");
+                   //$("#lblTimeToStorage1").text("              ");
+                   //$("#lblTimeToStorage2").text("              ");
+               }
+               else
+               {
+                   $("#TransferTimeToStorageMinuteLoad").show();
+                   $("#TransferTimeToStorageHourLoad").show();
+                   $("#StorageForLoad").show();
+                   //$("#lblStorage").text("Storage هدف");
+                   //$("#lblTimeToStorage1").text("زمان انتقال به");
+                   //$("#lblTimeToStorage2").text("Storage");
+               }
+
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+           }
+       });
+//-------------------------------------------------------------------------------------------------------------
+    }
+    function FillHasTIdState(ProcessNameValue) {
+                //---------کد زیر  برای مشخص کردن فرایندهای کا داری استورج هستند استفاده می شود--------------
+//-------------------------------------------------------------------------------------------------------------
+        $.ajax({
+            type: 'Get',
+            dataType: 'json',
+            url: '@Url.Action("GetOneRecoredWithProcessNameId", "QC", new { Area = "QC" })',
+            data: { Id: ProcessNameValue},
+                success: function (Data) {
+                    HasTIdState = Data.HasTId;
+
+                    },
+                async: false,
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("خطا در عملیات");
+                }
+        });
+    }
+    //---------------------------------------------------------------------------------------------------------
+    function renderProcessName(element, data) {
+    //render ControlParameter
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //-----------------------------------------------------------------------
+//---------------------------------------QParameterStatus--------------------
+
+//fetch QParameterStatus from database
+function LoadQParameterStatus(element) {
+
+        //ajax function for fetch data
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetQParameterStatusWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                QParameterStatuss = data;
+                //render catagory
+                renderQParameterStatus(element);
+            }
+        })
+
+}
+
+function renderQParameterStatus(element) {
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(QParameterStatuss, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //---------------------------------------Confirmation----------------------------------------------
+var Confirmations = []
+//fetch QParameterStatus from database
+function LoadConfirmation(element) {
+    if (Confirmations.length == 0) {
+        //ajax function for fetch data
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetConfirmationWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Confirmations = data;
+                //render catagory
+                renderConfirmation(element);
+            }
+        })
+    }
+    else {
+        //render catagory to the element
+        renderConfirmation(element);
+    }
+}
+
+function renderConfirmation(element) {
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(Confirmations, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+        //---------------------------------------TypeOfCorn----------------------------------------------
+    var TypeOfCorns = []
+//fetch QParameterStatus from database
+    function LoadTypeOfCorn(element) {
+        if (TypeOfCorns.length == 0) {
+        //ajax function for fetch data
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetTypeOfCornWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                TypeOfCorns = data;
+                //render catagory
+                renderTypeOfCorn(element);
+            }
+        })
+    }
+    else {
+        //render catagory to the element
+            renderTypeOfCorn(element);
+    }
+}
+
+    function renderTypeOfCorn(element) {
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+        $.each(TypeOfCorns, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
+    $('#add').click(function () {
+        var isAllValid = true;
+        $("#ProcessNameForLoad option:selected").text()
+       
+        if ($("#ProcessNameForLoad option:selected").text() == 'استیپینگ')
+        {
+            if ($('#TypeOfCornLoad').val() == "0") {
+                isAllValid = false;
+                $('#TypeOfCornLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#TypeOfCornLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        }
+        FuncProcessForValueLimit($("#ControlParameterLoad").val());
+    //validation and add order items
+
+        //شرط زیر برای چک کردن کمی یا کیفی بودن پارامتر است.شماره یک در پایین به معنایی پارامتر کیفی است.
+        if (ProcessTypeIdState == 1)
+        {
+            if ($('#CompanyForLoad').val() == "0") {
+                isAllValid = false;
+                $('#CompanyForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#CompanyForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ShiftForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ShiftForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ShiftForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if ($('#ProcessNameForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ControlParameterLoad').val() == "0") {
+                isAllValid = false;
+                $('#ControlParameterLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ControlParameterLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#QParameterStatusLoad').val() == "0") {
+                isAllValid = false;
+                $('#QParameterStatusLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#QParameterStatusLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ConfirmationLoad').val() == "0") {
+                isAllValid = false;
+                $('#ConfirmationLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ConfirmationLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if (document.getElementById("RegistrationTimeLoad").value == '') {
+                isAllValid = false;
+                $('#RegistrationTimeLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#RegistrationTimeLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#SamplingLocationForLoad').val() == "0") {
+                isAllValid = false;
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            //if (!($('#DescriptionLoad').val().trim() != '' && !isNaN($('#DescriptionLoad').val().trim()))) {
+            //    isAllValid = false;
+            //    $('#DescriptionLoad').siblings('span.error').css('visibility', 'visible');
+            //}
+            //else {
+            //    $('#DescriptionLoad').siblings('span.error').css('visibility', 'hidden');
+            //}
+        }
+        //بلوک زیر برای تنظیمات پارامتر کمی میباشد
+        else
+        {
+            if ($('#CompanyForLoad').val() == "0") {
+                isAllValid = false;
+                $('#CompanyForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#CompanyForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ShiftForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ShiftForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ShiftForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if ($('#ProcessNameForLoad').val() == "0") {
+                isAllValid = false;
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ProcessNameForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ControlParameterLoad').val() == "0") {
+                isAllValid = false;
+                $('#ControlParameterLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ControlParameterLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#ConfirmationLoad').val() == "0") {
+                isAllValid = false;
+                $('#ConfirmationLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ConfirmationLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if (!($('#ValueLimit').val().trim() != '' && !isNaN($('#ValueLimit').val().trim()))) {
+                isAllValid = false;
+                $('#ValueLimit').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#ValueLimit').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if (document.getElementById("RegistrationTimeLoad").value == '') {
+                isAllValid = false;
+                $('#RegistrationTimeLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#RegistrationTimeLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#SamplingLocationForLoad').val() == "0") {
+                isAllValid = false;
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#SamplingLocationForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            //if (!($('#DescriptionLoad').val().trim() != '' && !isNaN($('#DescriptionLoad').val().trim()))) {
+            //    isAllValid = false;
+            //    $('#DescriptionLoad').siblings('span.error').css('visibility', 'visible');
+            //}
+            //else {
+            //    $('#DescriptionLoad').siblings('span.error').css('visibility', 'hidden');
+            //}
+        }
+        if (HasTIdState == 1)
+        {
+            if ($('#TransferTimeToStorageMinuteLoad').val() == "0") {
+                isAllValid = false;
+                $('#TransferTimeToStorageMinuteLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#TransferTimeToStorageMinuteLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#TransferTimeToStorageHourLoad').val() == "0") {
+                isAllValid = false;
+                $('#TransferTimeToStorageHourLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#TransferTimeToStorageHourLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+            if ($('#StorageForLoad').val() == "0") {
+                isAllValid = false;
+                $('#StorageForLoad').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#StorageForLoad').siblings('span.error').css('visibility', 'hidden');
+            }
+        }
+        if (isAllValid) {
+            $('#Delete').show();
+        var $newRow = $('#mainrow').clone().removeAttr('id');
+        $('.Shift', $newRow).val($('#ShiftForLoad').val());
+        $('.Company', $newRow).val($('#CompanyForLoad').val());
+        //alert($('#ShiftForLoad option:selected').text());
+        $('.ProcessName', $newRow).val($('#ProcessNameForLoad').val());
+        $('.SamplingLocation', $newRow).val($('#SamplingLocationForLoad').val());
+        $('.ControlParameter', $newRow).val($('#ControlParameterLoad').val());
+        $('.QParameterStatus', $newRow).val($('#QParameterStatusLoad').val());
+        $('.Confirmation', $newRow).val($('#ConfirmationLoad').val());
+        $('.TypeOfCorn', $newRow).val($('#TypeOfCornLoad').val());
+        $('.TransferTimeToStorageMinute', $newRow).val($('#TransferTimeToStorageMinuteLoad').val());
+        $('.TransferTimeToStorageHour', $newRow).val($('#TransferTimeToStorageHourLoad').val());
+        $('.Storage', $newRow).val($('#StorageForLoad').val());
+        //Replace add button with remove button display: none
+            $('#Delete').css("background-color", "blue");
+            $('#Delete').css("display", "none");
+        $('#Delete', $newRow).addClass('remove').val('حذف').removeClass('btn-success').addClass('btn-danger');
+
+        //remove id attribute from new clone row
+            $('#CompanyForLoad,#ShiftForLoad,#TransferTimeToStorageMinuteLoad,#TransferTimeToStorageHourLoad,#StorageForLoad,#ProcessNameForLoad,#SamplingLocationForLoad,#ControlParameterLoad,#QParameterStatusLoad,#ConfirmationLoad,#TypeOfCornLoad,#ValueLimit,#add', $newRow).removeAttr('id');
+        $('span.error', $newRow).remove();
+        //append clone row
+        $('#orderdetailsItems').append($newRow);
+
+        //clear select data
+        //$('#CompanyForLoad,#ShiftForLoad,#ProcessNameForLoad,#SamplingLocationForLoad,#ControlParameterLoad,#QParameterStatusLoad,#ConfirmationLoad').val('0');
+        $('#ControlParameterLoad').val(0);
+        $('#ValueLimit').val('');
+        $('#DescriptionLoad').val('');
+        //$('#time').val('');
+        //$('#orderItemError').empty();
+    }
+
+})
+
+//remove button click event
+$('#orderdetailsItems').on('click', '.remove', function () {
+    $(this).parents('tr').remove();
+});
+
+$('#submit').click(function () {
+    var isAllValid = true;
+    //$('#orderItemError').text('خالی بودن lIST.');
+    //validate order items
+    $('#orderItemError').text('');
+
+    var list = [];
+    var errorItemCount = 0;
+    var QualityDesigns = new Array();
+
+    $('#orderdetailsItems').find("tr").each(function (index, ele) {
+        if (
+            $('select.Shift', this).val() == "0" || $('select.ProcessName', this).val() == "0" ||
+            $('select.SamplingLocation', this).val() == "0" || $('select.ControlParameter', this).val() == "0"
+           )
+        {
+            errorItemCount++;
+            $(this).addClass('error');
+        }
+        else
+        {
+            var QualityDesign = {};
+            ControlParameterTypeWithId($('select.ControlParameter', this).val());
+             //شرط زیر برای چک کردن کمی یا کیفی بودن پارامتر است.شماره یک در پایین به معنایی پارامتر کیفی است.
+            if (nnn ==1)
+            {
+                QualityDesign.QParameterStatusId = $('select.QParameterStatus', this).val();
+                QualityDesign.ValueLimit = 0;
+            }
+           //بلوک زیر برای تنظیمات پارامتر کمی میباشد
+            else
+            {
+                QualityDesign.QParameterStatusId = 1;
+                QualityDesign.ValueLimit = parseFloat($('.ValueLimit', this).val());
+
+            }
+               QualityDesign.ShiftId = $('select.Shift', this).val(),
+               QualityDesign.time = $('select.time', this).val(),
+               QualityDesign.ProcessNameId = $('select.ProcessName', this).val(),
+               QualityDesign.ProcessNameId = $('select.SamplingLocation', this).val(),
+               QualityDesign.ControlParameterId = $('select.ControlParameter', this).val(),
+               QualityDesign.ConfirmationId= $('select.Confirmation', this).val(),
+               QualityDesign.DateQD = $("#input1").val();
+                QualityDesign.TransferTimeToStorage = $("#TransferTimeToStorageMinuteLoad").text + $("#TransferTimeToStorageHourLoad").text;
+               QualityDesign.StorageId = $('select.Storage', this).val();
+               var hour = QualityDesign.DateQD;
+               QualityDesigns.push(QualityDesign);
+        }
+    })
+
+    if (errorItemCount > 0) {
+
+        $('#orderItemError').text(errorItemCount + " invalid entry in order item list.");
+        isAllValid = false;
+    }
+
+    if (QualityDesigns.length == 0) {
+
+        $('#orderItemError').text('لطفا اطلاعات را کامل کنید.');
+        isAllValid = false;
+    }
+
+
+    if ($('#input1').val().trim() == '') {
+
+        $('#input1').siblings('span.error').css('visibility', 'visible');
+        isAllValid = false;
+    }
+    else {
+
+        $('#input1').siblings('span.error').css('visibility', 'hidden');
+    }
+
+    if (isAllValid) {
+
+       // var data =
+       // {
+
+         // DateForQD: $('#orderDate').val().trim(),
+           //QualityDesigns: list
+
+        //}
+
+        $(this).val('Please wait...');
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveQD", "QC", new { Area = "QC" })',
+            data: JSON.stringify(QualityDesigns),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                if (data.status) {
+                    alert('Successfully saved');
+                    //here we will clear the form
+                    QualityDesigns = [];
+
+                }
+                else {
+                    alert('Error');
+                }
+                $('#submit').text('Save');
+            },
+            error: function (error) {
+                console.log(error);
+                $('#submit').text('Save');
+            }
+        });
+    }
+
+    });
+
+    //---------------------------------------------------------------------------------
+   //----------------------------------------------------------------------------------
+    LoadShift($('#ShiftForLoad'));
+    LoadStorage($('#StorageForLoad'));
+    LoadCompany($('#CompanyForLoad'));
+    LoadProcessName($('#ProcessNameForLoad'));
+    LoadQParameterStatus($('#QParameterStatusLoad'));
+    LoadConfirmation($('#ConfirmationLoad'));
+    LoadTypeOfCorn($('#TypeOfCornLoad'));
+    LoadSamplingLocation($('#SamplingLocationForLoad'));
+    LoadControlParameter(null);
+    LoadHour($('#TransferTimeToStorageHourLoad'));
+    LoadMinute($('#TransferTimeToStorageMinuteLoad')); 
+    //------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------
+</script>
+
+
+<script type="text/javascript">
+    $('#ControlParameterLoad').change(function () {
+
+        var selectedControlParameter = $("#ControlParameterLoad").val();
+        //alert(selectedControlParameter);
+$.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithControlParametreId", "QC", new { Area = "QC" })',
+           data: { Id: selectedControlParameter },
+           success: function (Data) {
+               ProcessTypeIdState = Data.ProcessTypeId;
+               if (Data.ProcessTypeId == 2)
+               {
+
+                   $("#ConfirmationLoad").prop("disabled", true);
+                   $("#ValueLimit").show();
+                   $("#lblValueLimit").show();
+                   $("#QParameterStatusLoad").hide();
+                   $("#lblQParameterStatus").hide();
+               }
+               else
+               {
+                   $("#ConfirmationLoad").prop("disabled", true);
+                   $("#lblConfirmation").hide();
+                   $("#ValueLimit").hide();
+                   $("#lblValueLimit").hide();
+                   $("#QParameterStatusLoad").show();
+                   $("#lblQParameterStatus").show();
+                   $("#ConfirmationLoad").prop("disabled", true);
+               }
+             //  $("label[for='lblUpperLimit']").text(Data.UpperLimit);
+              // $("label[for='lblBottomLimit']").text(Data.BottomLimit);
+
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               //alert("2500");
+           }
+       });
+
+        });
+</script>
+<script type="text/javascript">
+    $('#ProcessNameForLoad').change(function () {
+
+        var selectedProcessName = $("#ProcessNameForLoad option:selected").text();
+        if (selectedProcessName == 'استیپینگ')
+        {
+            //alert(selectedProcessName);
+            $("#TypeOfCornLoad").prop("disabled", false);
+           }
+        else
+          {
+            $("#TypeOfCornLoad").prop("disabled", true);  
+        }
+        if (selectedProcessName == 'تانک کیوسی')
+        {
+            GetQualityDesignForTypeOfCorn(TypeOfCornLoad);
+        }
+        });
+</script>
+<script type="text/javascript">
+    //$('#ValueLimit').change(function ()
+    //{
+
+    //    FuncProcessForValueLimit($("#ControlParameterLoad").val());
+    //});
+</script>
+<script type="text/javascript">
+    function FuncProcessForValueLimit(Value)
+    {
+
+
+           $.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithControlParametreId", "QC", new { Area = "QC" })',
+            data: { Id: Value },
+           success: function (Data) {
+               if (Data.ProcessTypeId == 2)
+               {
+                   
+                   if ($('#ValueLimit').val() >= Data.BottomLimit && $('#ValueLimit').val() <= Data.UpperLimit)
+                   {
+                       $("#ConfirmationLoad").val(1);
+                       //$("[name='lblConfirmation'] option:selected").text();
+                       //$("label[for='lblConfirmation']").text(value);
+                       $("label[for='lblConfirmation']").text($("#ConfirmationLoad option:selected").text());
+                   }
+                   else
+                   {
+                       $("#ConfirmationLoad").val(2);
+                      // var value = $("[name='lblConfirmation'] option:selected").text();
+                      // $("label[for='lblConfirmation']").text(value);
+                       $("label[for='lblConfirmation']").text($("#ConfirmationLoad option:selected").text());
+                   }
+
+               }
+               else
+               {
+
+               }
+             //  $("label[for='lblUpperLimit']").text(Data.UpperLimit);
+              // $("label[for='lblBottomLimit']").text(Data.BottomLimit);
+
+               },
+           async: false,
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+       });
+    }
+</script>
+<script type="text/javascript">
+    $('#QParameterStatusLoad').change(function () {
+
+        var selectedQParameterStatusLoad = $("#QParameterStatusLoad").val();
+
+
+$.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithQParameterStatusId", "QC", new { Area = "QC" })',
+           data: { Id: selectedQParameterStatusLoad },
+           success: function (Data) {
+               //alert(Data.ConfirmationId);
+               if (Data.ConfirmationId == 1)
+               {
+                       $("#ConfirmationLoad").val(1);
+                       $("label[for='lblConfirmation']").text($("#ConfirmationLoad option:selected").text());
+               }
+               else
+               {
+                   $("#ConfirmationLoad").val(2);
+                   $("label[for='lblConfirmation']").text($("#ConfirmationLoad option:selected").text());
+               }
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+       });
+        });
+</script>
+
+
+<script type="text/javascript">
+    var nnn ;
+    $(document).ready(function () {
+        $("#input1").change(function () {
+            var id = $("#input1").val();
+            LoadControlParameter(null);
+            $("#orderdetailsItems tr").remove();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url:'@Url.Action("GetAllQualityDesignWithDate", "QC", new { Area = "QC" })',
+                data: { "DateQD": id },
+                success: function (data) {
+
+                    $.each(data, function (id, QualityDesign) {
+
+                        ControlParameterTypeWithId(QualityDesign.ControlParameterId);
+
+                     if (nnn == 1)
+                     {
+
+                         $("#ConfirmationLoad").prop("disabled", true);
+                         $("#lblConfirmation").hide();
+                            $("#ValueLimit").hide();
+                            $("#lblValueLimit").hide();
+                            $("#QParameterStatusLoad").show();
+                            $("#lblQParameterStatus").show();
+                           // $("#ConfirmationLoad").prop("disabled", false);
+                            var $newRow = $('#mainrow').clone().removeAttr('id');
+                            $('.Code', $newRow).val(QualityDesign.Id);
+                            $('.Shift', $newRow).val(QualityDesign.ShiftId);
+                            $('.ProcessName', $newRow).val(QualityDesign.ProcessNameId);
+                            $('.ControlParameter', $newRow).val(QualityDesign.ControlParameterId);
+                            $('.QParameterStatus', $newRow).val(QualityDesign.QParameterStatusId);
+                         $('.Confirmation', $newRow).val(QualityDesign.ConfirmationId);
+                         $('.TypeOfCorn', $newRow).val(QualityDesign.TypeOfCornId);
+
+                        }
+                        else
+                        {
+                            $("#ConfirmationLoad").prop("disabled", true);
+                            $("#ValueLimit").show();
+                            $("#lblValueLimit").show();
+                            $("#QParameterStatusLoad").hide();
+                            $("#lblQParameterStatus").hide();
+                            var $newRow = $('#mainrow').clone().removeAttr('id');
+                            $('.Code', $newRow).val(QualityDesign.Id);
+                            $('.Shift', $newRow).val(QualityDesign.ShiftId);
+                            $('.ProcessName', $newRow).val(QualityDesign.ProcessNameId);
+                            $('.ControlParameter', $newRow).val(QualityDesign.ControlParameterId);
+                            $('.Confirmation', $newRow).val(QualityDesign.ConfirmationId);
+                            $('.TypeOfCorn', $newRow).val(QualityDesign.TypeOfCornId);
+                            $('.ValueLimit', $newRow).val(QualityDesign.ValueLimit);
+
+                        }
+                        ////Replace add button with remove button
+                        $('#add', $newRow).addClass('remove').val('Remove').removeClass('btn-success').addClass('btn-danger');
+                        $('#orderdetailsItems').append($newRow);
+                        //remove id attribute from new clone row
+                        $('#ShiftForLoad,#ProcessNameForLoad,#ControlParameterLoad,#QParameterStatusLoad,#ConfirmationLoad,#TypeOfCornLoad,#ValueLimit,#add', $newRow).removeAttr('id');
+                        $('span.error', $newRow).remove();
+                        //append clone row
+
+
+                        //clear select data
+                        $('#ShiftForLoad,#ProcessNameForLoad,#ControlParameterLoad,#QParameterStatusLoad,#ConfirmationLoad,#TypeOfCornLoad').val('0');
+                        $('#ValueLimit').val('');
+                        $('#orderItemError').empty();
+
+                    });
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve books.');
+                }
+            });
+        });
+    });
+
+
+
+</script>
+
+<script type="text/javascript">
+    function ControlParameterTypeWithId(Id) {
+        $.ajax({
+            type: 'Get',
+            dataType: 'json',
+            url: '@Url.Action("GetOneRecoredWithControlParametreId", "QC", new { Area = "QC" })',
+                    data: { Id:Id},
+                success: function (Data) {
+                    nnn = Data.ProcessTypeId;
+
+                    },
+                async: false,
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("خطا در عملیات");
+                }
+        });
+    }
+
+
+    $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+
+        var QCs = new Array();
+
+
+        $("#orderdetailsItems TBODY  TR").each(function () {
+            var row = $(this);
+            var QC = {};
+            //alert($('#ShiftForLoad option:selected').text());
+            QC.CompanyId = row.find("td:eq(0) option:selected").val();
+            QC.DateQD = $('#PassDate').val();
+
+            QC.ShiftId = row.find("td:eq(1) option:selected").val();
+            QC.RegistrationTime = row.find("td:eq(2) input[type=text]").val();
+            QC.ProcessNameId = row.find("td:eq(3) option:selected").val();
+            QC.SamplingLocationId = row.find("td:eq(4) option:selected").val();
+            QC.ControlParameterId = row.find("td:eq(5) option:selected").val();
+
+            ControlParameterTypeWithId(QC.ControlParameterId);
+           //شرط زیر برای چک کردن کمی یا کیفی بودن پارامتر است.شماره یک در پایین به معنایی پارامتر کیفی است.
+            if (nnn == 1) {
+                QC.QParameterStatusId = row.find("td:eq(10) option:selected").val()
+                QC.ValueLimit = null;
+
+            }
+            //دو در پایین منظور پارامتر کمی است
+            else if (nnn == 2) {
+                QC.ValueLimit = row.find("td:eq(6) input[type=text]").val();
+               // alert(QC.ValueLimit);
+                QC.QParameterStatusId = null;
+
+            }
+
+            //تابع زیر برای مشخص کردن متغییر HasTIdState می باشد
+            FillHasTIdState(QC.ProcessNameId);
+         //متغییر زیر اگر برابر 1 باشد فرایند دارای استوریج مب یاشد
+            if (HasTIdState == 0)
+            {
+                QC.StorageId = null;
+                QC.TransferTimeToStorage = " ";
+            }
+            else if (HasTIdState == 1)
+            {
+                QC.StorageId = row.find("td:eq(7) option:selected").val();
+                QC.TransferTimeToStorage = row.find("td:eq(9) option:selected").text() + ":" + row.find("td:eq(8) option:selected").text();
+            }
+            //alert(row.find("td:eq(7) option:selected").val());
+
+
+            QC.ConfirmationId = row.find("td:eq(11) option:selected").val();
+            QC.Description = row.find("td:eq(12) input[type=text]").val();
+            QC.TypeOfCornId = row.find("td:eq(13) option:selected").val();
+            QCs.push(QC);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url:  '@Url.Action("AddQualityDesignList", "QC", new { Area = "QC" })',
+            data: JSON.stringify(QCs),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                alert("اطلاعات با موفقیت ثبت شد.");
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
+                }
+
+            }
+        });
+    });
+</script>
+        
+@*<script>
+            $('#timepicker1').timepicki();
+    </script>*@
+@*<script>
+        function myFunction() {
+            document.getElementById("timepicker1").value = "22:53:05";
+        }
+    </script>*@
+

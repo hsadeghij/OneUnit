@@ -1,0 +1,63 @@
+﻿@model ProjectPlanViewModel
+
+<script src="~/js/Chosen/docsupport/jquery-3.2.1.min.js" asp-append-version="true"></script>
+
+<script src="~/js/Chosen/chosen.jquery.js" asp-append-version="true"></script>
+
+<script src="~/js/Chosen/docsupport/prism.js" asp-append-version="true"></script>
+
+<script src="~/js/Chosen/docsupport/init.js" asp-append-version="true"></script>
+
+<script src="~/js/ListBox/chosen.jquery.js" asp-append-version="true"></script>
+
+<form asp-action="AddEditProjectPlan" asp-area="Transit" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} ProjectPlan" })
+    <h1>اطلاعات تردد</h1>
+    <h1>@TempData["PassDate"] </h1>
+    <div class="well" align="right">
+        <div class="form-group">
+            @Html.LabelFor(n => n.Project)
+            @Html.DropDownListFor(n => n.ProjectId, new SelectList(ViewBag.Project, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.ProjectId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.Person)
+            @Html.DropDownListFor(n => n.PersonId, new SelectList(ViewBag.Person, "Id", "FullName"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.PersonId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.SarparastList)
+            @Html.ListBoxFor(m => m.sarparastList,
+            Model.GetSarparastList.Select(X => new SelectListItem{Text = X.FullName,
+                Value = X.Id.ToString() }),new {@class= "chosen-select-rtl", @multiple="true"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.OstadKarList)
+            @Html.ListBoxFor(m => m.ostadkarList,
+            Model.GetOstadKarList.Select(X => new SelectListItem{Text = X.FullName,
+                Value = X.Id.ToString() }),new {@class= "chosen-select-rtl", @multiple="true"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.WorkerList)
+            @Html.ListBoxFor(m => m.workerList,
+            Model.GetWorkerList.Select(X => new SelectListItem{Text = X.FullName,
+                Value = X.Id.ToString() }),new {@class= "chosen-select-rtl", @multiple="true"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(n => n.WorkType)
+            @Html.DropDownListFor(n => n.WorkTypeId, new SelectList(ViewBag.WorkType, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.WorkTypeId, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Activity)
+            @Html.EditorFor(n => n.Activity, new { htmlAttributes = new { @class = "form-control", id = "Activity" } })
+            @Html.ValidationMessageFor(n => n.Activity, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Description)
+            @Html.EditorFor(n => n.Description, new { htmlAttributes = new { @class = "form-control", id = "Activity" } })
+            @Html.ValidationMessageFor(n => n.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>

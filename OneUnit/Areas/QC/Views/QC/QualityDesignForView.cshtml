@@ -1,0 +1,431 @@
+﻿@model IEnumerable<QualityDesign>
+@{
+
+    ViewData["Title"] = "طرح کیفیت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="top-buffer"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head">طرح کیفیت</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="sr-only" for="exampleInput3">تاریخ</label>
+            <div class="input-group">
+                <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#exampleInput3">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+                <input type="text" class="form-control" id="exampleInput3" placeholder="تاریخ" data-targetselector="#exampleInput3" data-mddatetimepicker="true"
+                       data-placement="right" data-englishnumber="true" />
+
+            </div>
+            <div>
+                <label>شیفت</label>
+                <select id="ShiftForLoad" class="Shift form-control" style="width:60px;font-size:14px;margin-right:1px;">
+                    <option>انتخاب</option>
+                </select>
+            </div>
+            <div>
+                <label>شرکت</label>
+                <select id="CompanyForLoad" class="Company form-control" onchange="LoadProcessNameWithCompany(this);" style="width:90px">
+                    <option>انتخاب</option>
+                </select>
+            </div>
+            <div>
+                <label>نام فرآیند</label>
+                <select id="ProcessNameForLoad" class="ProcessName form-control" style="width:125px;font-size:14px;" onchange="LoadSampelingLocationWithProcessName(this);">
+                    <option>انتخاب</option>
+
+                </select>
+            </div>
+            <div>
+                <label>محل نمونه برداری</label>
+                <select id="SamplingLocationForLoad" class="SamplingLocation form-control" onchange="LoadControlParameter(this);" style="width:100px;font-size:14px;">
+                    <option>انتخاب</option>
+
+                </select>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <label>دقیقه</label>
+                            <select id="TransferTimeToStorageMinuteLoad" class="TransferTimeToStorageMinute form-control" style="width:60px;font-size:14px;">
+                                <option>انتخاب</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>ساعت</label>
+                            <select id="TransferTimeToStorageHourLoad" class="TransferTimeToStorageHour form-control" style="width:60px;font-size:14px;">
+                                <option>انتخاب</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+        @*asp-action="DynamicFormQualityDesign" asp-area="QC"*@
+        <div class="btn-group">
+            <a id="btnSave" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunction();">
+                <i class="glyphicon glyphicon-plus"></i>  درج جدید
+
+            </a>
+        </div>
+        <div class="btn-group">
+            <a id="btnSavee" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunctionn();">
+                <i class="glyphicon glyphicon-plus"></i>  نمایش
+
+            </a>
+        </div>
+        <div class="top-buffer"></div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>نام شرکت</th>
+                    <th>تاریخ</th>
+                    <th>شیفت</th>
+                    <th>ساعت</th>
+                    <th>نام فرآیند</th>
+                    <th>محل نمونه برداری</th>
+                    <th>پارامتر کنترلی</th>
+                    <th>مقدار</th>
+                    <th>وضعیت پارامتر کیفی</th>
+                    <th>وضعیت تایید</th>
+                    <th>توضیحات</th>
+                </tr>
+            </thead>
+            <tbody id="contacts"></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-student", AreaLabeledId = "modal-action-student-label", Size = ModalSize.Medium })
+
+@section scripts
+    {
+    <script src="~/js/student-index.js" asp-append-version="true"></script>
+}
+
+<script type="text/javascript">
+    function theFunction() {
+        // return true or false, depending on whether you want to allow the `href` property to follow through or not
+        var DateInputLoad = $("#exampleInput3").val();
+
+$.ajax({
+           type: 'POST',
+           dataType: 'json',
+           url: '@Url.Action("PassDate", "QC", new { Area = "QC" })',
+           data: { TempDate: DateInputLoad },
+           success: function (data) {
+               window.location.href = data;
+
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function theFunctionn() {
+       
+       
+        $.ajax({
+
+            type: "GET",
+            url: '@Url.Action("GetAllQualityDesignForShow", "QC", new { Area = "QC" })',
+            data: { 'Value1': $('#exampleInput3').val(), 'Value2': $('#CompanyForLoad').val(), 'Value3': $('#ProcessNameForLoad').val(), 'Value4': $('#SamplingLocationForLoad').val(), 'Value5': $("#TransferTimeToStorageHourLoad option:selected").text() + ':' + $("#TransferTimeToStorageMinuteLoad option:selected").text() }, 'Value6': $('#ShiftForLoad').val(),
+            success: function (data) {
+                var row = "";
+                $.each(data, function (id, QualityDesign) {
+
+
+
+                    row += "<tr><td>" + QualityDesign.Company.Name + "</td>" + "<td>" + QualityDesign.DateQD + "</td>" + "<td>" + QualityDesign.Shift.Name + "</td>" + "<td>" + QualityDesign.RegistrationTime + "</td>" + "<td>" + QualityDesign.ProcessName.Name + "</td>" + "<td>" + QualityDesign.SamplingLocation.Name +"</td>" + "<td>" + QualityDesign.ControlParameter.Name + "</td>" + "<td>" + QualityDesign.ValueLimit + "</td>" + "<td>" + QualityDesign.QParameterStatus.Name + "</td>" + "<td>" + QualityDesign.Confirmation.Name + "</td>" +"<td>" + QualityDesign.Description + "</td>" +"</tr>"
+
+                });
+                $("#contacts").html(row);
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve books.');
+            }
+        });
+
+    }
+        //----------------------------------------------ProcessNames---------------------------------
+
+//fetch ProcessName from database
+    function LoadProcessName(element) {
+  
+        //ajax function for fetch data
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetProcessNameWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+
+                //render catagory
+                renderProcessName($('#ProcessNameForLoad'), data);
+            }
+            ,
+            error: function (error) {
+                console.log(error);
+            }
+        })
+
+
+}
+
+    function renderProcessName(element, data) {
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //-------------------------------------------------------------------------------------------------------
+      //--------------------------------ProcessNameWithCompany------------------------------------------
+    //fetch ControlParameter
+function LoadProcessNameWithCompany(ProcessNameWithCompanyDD) {
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetProcessNameWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#ProcessNameForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+
+      $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetSamplingLocationWithCompanyWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#CompanyForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderProcessName($('#SamplingLocationForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+
+
+
+}
+
+    function renderProcessName(element, data) {
+    //render ControlParameter
+    var $ele = $(element);
+    $ele.empty();
+    $ele.append($('<option/>').val('0').text('انتخاب'));
+    $.each(data, function (i, val) {
+        $ele.append($('<option/>').val(val.Id).text(val.Name));
+    })
+    }
+    //-------------------------------------------------------------------------------------------------------
+        //----------------------------------------SamplingLocation-----------------------------------
+        var ProcessTypeIdState;
+        var SamplingLocations = []
+    //fetch Shifts from database
+        function LoadSamplingLocation(element) {
+            if (SamplingLocations.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetSamplingLocationWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+            Shifts = data;
+            //render catagory
+            renderShift(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderShift(element);
+            }
+            }
+
+            function renderShift(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Shifts, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------------------
+        //----------------------------------------Company--------------------------------------------
+    var CompanyTypeIdState;
+    var Companys = []
+    //fetch Shifts from database
+    function LoadCompany(element) {
+
+        if (Companys.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompanyWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+                Companys = data;
+            //render catagory
+                renderCompany(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderCompany(element);
+            }
+            }
+
+    function renderCompany(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Companys, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------------------
+        //--------------------------------------SampelingLocationWithProcessName--------------------------------
+
+    function LoadSampelingLocationWithProcessName(SampelingLocationWithProcessNameDD) {
+
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetSamplingLocationWithProcessNameWithJson", "QC", new { Area = "QC" })',
+        data: { 'Value1': $('#ProcessNameForLoad').val()},
+        success: function (data) {
+            //render ControlParameters to appropriate dropdown
+            renderSampelingLocation($('#SamplingLocationForLoad'), data);
+            //$(ProcessNameDD).parents('.mycontainer').find('select.ControlParameter')
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        })
+
+    
+    }
+    function renderSampelingLocation(element, data) {
+        //render ControlParameter
+        var $ele = $(element);
+        $ele.empty();
+        $ele.append($('<option/>').val('0').text('انتخاب'));
+        $.each(data, function (i, val) {
+            $ele.append($('<option/>').val(val.Id).text(val.Name));
+        })
+    }
+    //-------------------------------------------------------------------------------------------------------
+        //----------------------------------------Hour-----------------------------------------------
+    var Hours = []
+    //fetch Shifts from database
+    function LoadHour(element) {
+        if (Hours.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetHourWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+             Hours = data;
+            //render catagory
+            renderHour(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderHour(element);
+            }
+            }
+
+            function renderHour(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Hours, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+        //----------------------------------------Minute-----------------------------------------------
+    var Minutes = []
+    //fetch Shifts from database
+    function LoadMinute(element) {
+        if (Minutes.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetMinuteWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+             Minutes = data;
+            //render catagory
+            renderMinute(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderMinute(element);
+            }
+            }
+
+    function renderMinute(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Minutes, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------Shifts------------------------------------------------------
+    var ProcessTypeIdState;
+    var Shifts = []
+    //fetch Shifts from database
+    function LoadShift(element) {
+        if (Shifts.length == 0) {
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetShiftWithJson", "QC", new { Area = "QC" })',
+            success: function (data) {
+            Shifts = data;
+            //render catagory
+            renderShift(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderShift(element);
+            }
+            }
+
+            function renderShift(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(Shifts, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+            })
+    }
+    //-------------------------------------------------------------------------------------------------------
+    LoadProcessName($('#ProcessNameForLoad'));
+    LoadSamplingLocation($('#SamplingLocationForLoad'));
+    LoadCompany($('#CompanyForLoad'));
+    LoadHour($('#TransferTimeToStorageHourLoad'));
+    LoadMinute($('#TransferTimeToStorageMinuteLoad')); 
+    LoadShift($('#ShiftForLoad'));
+</script>

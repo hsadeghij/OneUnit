@@ -1,0 +1,328 @@
+﻿@model QualityDesignViewModel
+@{
+    ViewData["Title"] = "طرح کیفیت";
+}
+<h2>@ViewBag.Tilte</h2>
+
+<div class="col-md-6 col-md-offset-3">
+    <div class="well">
+        <form asp-action="AddQualityDesign" asp-area="QC" role="form">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div id = "fromDate100"  class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#fromDate1" data-groupid="group1"
+                             data-fromdate="true" data-enabletimepicker="true" data-placement="left" >
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                        @*<input type="text" class="form-control" id="fromDate1" placeholder="از تاریخ" data-mddatetimepicker="true" data-trigger="click"
+                               data-targetselector="#fromDate1" data-groupid="group1" data-fromdate="true" data-enabletimepicker="true" data-placement="right" />*@
+                        
+                        @Html.EditorFor(n => n.DateQD, new { htmlAttributes = new {  @class = "form-control", id = "fromDate1", placeholder = " تاریخ", data_mddatetimepicker = "true", data_trigger = "click", data_targetselector = "#fromDate1", data_groupid = "group1", data_fromdate = "true" ,data_enabletimepicker = "true", data_placement = "right", onchange = "DateComparisionJavascriptFun();" } })
+                        @Html.ValidationMessageFor(n => n.DateQD, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.Shift)
+                            @Html.DropDownListFor(n => n.ShiftId, new SelectList(ViewBag.Shift, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" ,id="ComboShift", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(n => n.ShiftId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.ProcessName)
+                            @Html.DropDownListFor(n => n.ProcessNameId, new SelectList(ViewBag.ProcessName, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" , id = "ProcessName", data_trigger = "click" })
+                            @Html.ValidationMessageFor(n => n.ProcessNameId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.ControlParameter)
+                            @Html.DropDownListFor(n => n.ControlParameterId, new SelectList(ViewBag.ControlParameter, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "ControlParameter", data_trigger = "click" })
+                            @Html.ValidationMessageFor(n => n.ControlParameterId, "", new { @class = "text-danger" })
+                       </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.ValueLimit, new { id = "lblValueLimit" })
+                            @Html.EditorFor(n => n.ValueLimit, new { htmlAttributes = new { @class = "form-control", id = "ValueLimit" } })
+                            @Html.ValidationMessageFor(n => n.ValueLimit, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.QParameterStatus, new { id = "lblQParameterStatus" })
+                            @Html.DropDownListFor(n => n.QParameterStatusId, new SelectList(ViewBag.QParameterStatus, "Id", "Name"), new { @class = "form-control", id = "QParameterStatus" })
+                            @Html.HiddenFor(n => n.Id)
+                            @Html.ValidationMessageFor(n => n.QParameterStatusId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(n => n.Confirmation, new { id = "lblConfirmation" })
+                            @Html.DropDownListFor(n => n.ConfirmationId, new SelectList(ViewBag.Confirmation, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" , id = "Confirmation" })
+                            @Html.ValidationMessageFor(n => n.ConfirmationId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("lblConfirmation", "وضعیت تایید", new { id = "lblConfirmation" })
+                         @*   @Html.Label("lblBottomLimit", "حد پایین", new { id = "BottomLimit" })*@
+                          @*  @Html.Label("lblProcessTypeId", "کدنوع فرآیند", new { id = "ProcessTypeId" })*@
+                        </div>
+                            @*<div class="form-group">
+                                @Html.LabelFor(n => n.Tank)
+                                @Html.DropDownListFor(n => n.TankId, new SelectList(ViewBag.Tank, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "Tank" })
+                                @Html.ValidationMessageFor(n => n.TankId, "", new { @class = "text-danger" })
+                            </div>
+                <div class="input-group">
+                    <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#fromDate2" data-groupid="group2"
+                         data-fromdate="true" data-enabletimepicker="true" data-placement="left">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                    @Html.LabelFor(n => n.DateTankFilling)
+                    @Html.EditorFor(n => n.DateTankFilling, new { htmlAttributes = new { @class = "form-control", id = "fromDate2", placeholder = " تاریخ", data_mddatetimepicker = "true", data_targetselector = "#fromDate2", data_groupid = "group1", data_fromdate = "true", data_enabletimepicker = "true", data_placement = "right",  } })
+                    @Html.ValidationMessageFor(n => n.DateTankFilling, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#fromDate4" data-groupid="group2"
+                         data-fromdate="true" data-enabletimepicker="true" data-placement="left">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                    @Html.LabelFor(n => n.DateTankDrain)
+                    @Html.EditorFor(n => n.DateTankDrain, new { htmlAttributes = new { @class = "form-control", id = "fromDate4", placeholder = " تاریخ", data_mddatetimepicker = "true", data_targetselector = "#fromDate4", data_groupid = "group1", data_fromdate = "true", data_enabletimepicker = "true", data_placement = "right", } })
+                    @Html.ValidationMessageFor(n => n.DateTankDrain, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.LevelTank)
+                    @Html.EditorFor(n => n.LevelTank, new { htmlAttributes = new { @class = "form-control", id = "LevelTank" } })
+                    @Html.ValidationMessageFor(n => n.LevelTank, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Storage)
+                    @Html.DropDownListFor(n => n.StorageId, new SelectList(ViewBag.Storage, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "Storage" })
+                    @Html.ValidationMessageFor(n => n.StorageId, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#fromDate3" data-groupid="group3"
+                         data-fromdate="true" data-enabletimepicker="true" data-placement="left">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                    @Html.LabelFor(n => n.DateStorageTransfer)
+                    @Html.EditorFor(n => n.DateStorageTransfer, new { htmlAttributes = new { @class = "form-control", id = "fromDate3", placeholder = " تاریخ", data_mddatetimepicker = "true", data_targetselector = "#fromDate3", data_groupid = "group1", data_fromdate = "true", data_enabletimepicker = "true", data_placement = "right", } })
+                    @Html.ValidationMessageFor(n => n.DateStorageTransfer, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Production)
+                    @Html.DropDownListFor(n => n.ProductionId, new SelectList(ViewBag.Production, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "Production" })
+                    @Html.ValidationMessageFor(n => n.ProductionId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.ColumnNumber)
+                    @Html.DropDownListFor(n => n.ColumnNumberId, new SelectList(ViewBag.ColumnNumber, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "ColumnNumber" })
+                    @Html.ValidationMessageFor(n => n.ColumnNumberId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Sampler)
+                    @Html.DropDownListFor(n => n.SamplerId, new SelectList(ViewBag.Sampler, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "Sampler" })
+                    @Html.ValidationMessageFor(n => n.SamplerId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Tester)
+                    @Html.DropDownListFor(n => n.TesterId, new SelectList(ViewBag.Tester, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "Tester" })
+                    @Html.ValidationMessageFor(n => n.TesterId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.ControllerUser)
+                    @Html.DropDownListFor(n => n.ControllerUserId, new SelectList(ViewBag.ControllerUser, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "ControllerUser" })
+                    @Html.ValidationMessageFor(n => n.ControllerUserId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.SamplingLocation)
+                    @Html.DropDownListFor(n => n.SamplingLocationId, new SelectList(ViewBag.SamplingLocation, "Id", "Name"), "انتخاب کنید", new { @class = "form-control", id = "SamplingLocation" })
+                    @Html.ValidationMessageFor(n => n.SamplingLocationId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Description)
+                    @Html.EditorFor(n => n.Description, new { htmlAttributes = new { @class = "form-control", id = "Description" } })
+                    @Html.ValidationMessageFor(n => n.Description, "", new { @class = "text-danger" })
+                </div>*@
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-envelope"></i>ثبت اطلاعات  </button>
+                            <div class="text-success">@ViewBag.UserMessage</div>
+                        </div>
+                    </div>
+</form>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+
+    <script type="text/javascript">
+        $('#ProcessName').change(function () {
+            var selectedProcessName = $("#ProcessName").val();
+            var ControlParameterSelect = $('#ControlParameter');
+            ControlParameterSelect.empty();
+            if (selectedProcessName != null && selectedProcessName != '') {
+
+                $.getJSON('@Url.Action("GetControlParameter", "QC", new { Area = "QC" })', { Id: selectedProcessName }, function (ControlParameters) {
+                    if (ControlParameters != null && !jQuery.isEmptyObject(ControlParameters))
+                        {
+                    ControlParameterSelect.append($('<option/>', {
+                        value: null,
+                        text: ""
+                    }));
+
+                    $.each(ControlParameters, function (index, ControlParameter) {
+
+                        ControlParameterSelect.append($('<option/>', {
+
+                            value: ControlParameter.Value,
+
+                            text: ControlParameter.Text
+
+                        }));
+
+                    });
+                };
+            });
+          }
+        });
+    </script>
+
+@*کد زیر برای تنظیمات تاریخ می باشد*@
+<script type="text/javascript">
+    $('#fromDate100').MdPersianDateTimePicker({
+            Placement: 'left',
+            Trigger: 'click',
+            EnableTimePicker: true,
+            TargetSelector: '#fromDate1',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'HH',
+            IsGregorian: false,
+            EnglishNumber: false,
+            InLine: false
+        });
+</script>
+
+
+<script type="text/javascript">
+    $('#ControlParameter').change(function () {
+
+        var selectedControlParameter = $("#ControlParameter").val();
+        //alert(selectedControlParameter);
+$.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithControlParametreId", "QC", new { Area = "QC" })',
+           data: { Id: selectedControlParameter },
+           success: function (Data) {
+               if (Data.ProcessTypeId == 2)
+               {
+                   
+                  // $("#Confirmation").prop("disabled", true);
+                   //--$("#Confirmation").attr("disabled", true);
+                 //-- $("#ValueLimit").attr("disabled", false);
+                  //-- $("#QParameterStatus").attr("disabled", true );
+                   $("#Confirmation").hide();
+                   $("#lblConfirmation").hide();
+                   $("#ValueLimit").show();
+                   $("#lblValueLimit").show();
+                 $("#QParameterStatus").hide();
+                 $("#lblQParameterStatus").hide();
+               }
+               else
+               {
+                   //$("#Confirmation").prop("enable", true);
+                  //--- $("#Confirmation").attr("disabled", false);
+                   //---$("#ValueLimit").attr("disabled", true);
+                   //---$("#QParameterStatus").attr("disabled", false);
+                   $("#lblConfirmation").show();
+                   $("#ValueLimit").hide();
+                   $("#lblValueLimit").hide();
+                   $("#lblQParameterStatus").show();
+               }
+             //  $("label[for='lblUpperLimit']").text(Data.UpperLimit);  
+              // $("label[for='lblBottomLimit']").text(Data.BottomLimit); 
+               
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("2500");
+           }
+       });
+
+        });
+</script>
+
+<script type="text/javascript">
+    $('#ValueLimit').change(function () {
+
+        var selectedControlParameter = $("#ControlParameter").val();
+        //alert(selectedControlParameter);
+$.ajax({
+           type: 'Get',
+           dataType: 'json',
+           url: '@Url.Action("GetOneRecoredWithControlParametreId", "QC", new { Area = "QC" })',
+           data: { Id: selectedControlParameter },
+           success: function (Data) {
+               if (Data.ProcessTypeId == 2)
+               {
+                   if ($('#ValueLimit').val() >= Data.BottomLimit && $('#ValueLimit').val() <= Data.UpperLimit)
+                   {
+                       $("#Confirmation").val(1);
+                       //$("[name='lblConfirmation'] option:selected").text();
+                       //$("label[for='lblConfirmation']").text(value); 
+                       $("label[for='lblConfirmation']").text($("#Confirmation option:selected").text()); 
+                   }
+                   else
+                   {
+                       $("#Confirmation").val(2);
+                      // var value = $("[name='lblConfirmation'] option:selected").text();
+                      // $("label[for='lblConfirmation']").text(value);  
+                       $("label[for='lblConfirmation']").text($("#Confirmation option:selected").text()); 
+                   }
+
+               }
+               else
+               {
+
+               }
+             //  $("label[for='lblUpperLimit']").text(Data.UpperLimit);
+              // $("label[for='lblBottomLimit']").text(Data.BottomLimit);
+
+           },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("2500");
+           }
+       });
+
+        });
+</script>
+<script type="text/javascript">
+    //تبدیل عدد از فارسی به انگلیسی
+        String.prototype.toEnglishDigits = function () {
+            var id = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' };
+            return this.replace(/[^0-9.]/g, function (w) {
+                return id[w] || w;
+            });
+        };
+        function DateComparisionJavascriptFun() {
+
+            var TempValue = document.getElementById('fromDate1').value;
+            // alert(TempValue.substr(11, 2));
+            // var A1 = TempValue.substr(11, 2);
+            // var hour = new Date().getHours();
+            // alert(hour);
+            var temp01 = '۷۷'.toEnglishDigits();
+            var hour = String(TempValue.substr(11, 2));
+            var hour3 = String(temp01.substr(0, 1));
+            var hour1 = "20";
+            var hour2 = hour.toEnglishDigits();
+            //alert(temp01 );
+            var A2 = 7;
+            if (hour2 < A2) {
+                $("#ComboShift").val("1");
+            }
+            else {
+                $("#ComboShift").val("2");
+            }
+        }
+
+</script>
+}
+

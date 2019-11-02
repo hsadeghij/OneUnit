@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container" style="font-family:'B Arabic Style' Nazanin">
+    <div class="details">
+        <h2>
+            ثبت کارمندان
+        </h2>
+        <table class="table table-responsive" style="width:1500px">
+            <thead>
+                <tr>
+                    <td id="lblFullName">نام و نام خانوادگی:</td>
+                    <td id="lblRating">امتیاز دهی</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mycontainer" id="mainrow">
+
+                    <td style="width:300px">
+                        <select id="PersonForLoad" class="Person form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <select id="RatingForLoad" class="Rating form-control">
+                            <option>انتخاب</option>
+                        </select>
+                        <span class="error">مقدار وارد کنید</span>
+                    </td>
+                    <td style="width:300px">
+                        <input type="button" id="add" value="اضافه" style="width:80px" class="btn btn-success" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="orderItems">
+            <table class="table table-responsive" id="orderdetailsItems" style="width:1500px">
+                <tbody></tbody>
+            </table>
+            <span id="orderItemError" style="color:red"></span>
+        </div>
+        <div style="padding:10px 0; text-align:right">
+            <input id="btnSave" type="button" value="ذخیره" class="btn btn-warning" style="padding:10px 20px" />
+        </div>
+    </div>
+</div>
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+<script type="text/javascript">
+
+//-----------------------------------------------Rating------------------------------------------------------
+    var ValueList = []
+    //fetch Shifts from database
+    function LoadRating(element) {
+        if (ValueList.length == 0) {
+            //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetRatingWithJson", "Transit", new { Area = "Transit" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                        renderLoad1(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderLoad1(element);
+           }
+    }
+    //------------------------------------------Person---------------------------------------------
+        var ValueList = []
+    //fetch Shifts from database
+    function LoadPerson(element) {
+        if (ValueList.length == 0) {
+            //ajax function for fetch data
+            $.ajax
+                ({
+                    type: "GET",
+                    url: '@Url.Action("GetPersonWithJson", "Transit", new { Area = "Transit" })',
+                    success: function (data)
+                    {
+                        ValueList = data;
+                       //render catagory
+                        renderLoad(element);
+                    }
+                })
+           }
+        else
+           {
+                //render catagory to the element
+            renderLoad(element);
+           }
+    }
+    //--------------------------Common-------------------------------------------------------------
+    function renderLoad(element)
+    {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.FullName));
+            })
+    }
+    function renderLoad1(element) {
+        var $ele = $(element);
+        $ele.empty();
+        $ele.append($('<option />').val('0').text('انتخاب'));
+        $.each(ValueList, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Name));
+        })
+    }
+    //----------------------------------------Add----------------------------------------------------
+    $('#add').click(function () {
+        //validation and add order items
+        var isAllValid = true;
+        //-------------1-1----------------
+        if ($('#RatingForLoad').val() == "0") {
+            isAllValid = false;
+            $('#RatingForLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#RatingForLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //--------------2-2------------
+        if ($('#PersonForLoad').val() == "0") {
+            isAllValid = false;
+            $('#PersonForLoad').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#PersonForLoad').siblings('span.error').css('visibility', 'hidden');
+        }
+        //-----------------------------
+        if (isAllValid) {
+            var $newRow = $('#mainrow').clone().removeAttr('id');
+            $('.Rating', $newRow).val($('#RatingForLoad').val());
+            $('.Person', $newRow).val($('#PersonForLoad').val());
+            //Replace add button with remove button
+            $('#add', $newRow).addClass('remove').val('حذف').removeClass('btn-success').addClass('btn-danger');
+
+            //remove id attribute from new clone row
+            $('#RatingForLoad,#PersonForLoad,#add', $newRow).removeAttr('id');
+            $('span.error', $newRow).remove();
+            //append clone row
+            $('#orderdetailsItems').append($newRow);
+
+        }
+
+    })
+
+    //remove button click event
+    $('#orderdetailsItems').on('click', '.remove', function () {
+        $(this).parents('tr').remove();
+    });
+
+    //----------------------------------------Load-----------------------------------------------
+    LoadPerson($('#PersonForLoad'));
+    LoadRating($('#RatingForLoad'));
+    //-------------------------------------------------------------------------------------------
+
+</script>
+<script type="text/javascript">
+        //---------------------------------------Save--------------------------------------------
+
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+      
+        var CPs = new Array();
+        $("#orderdetailsItems TBODY  TR").each(function () {
+            var row = $(this);
+            var CP = {};
+            CP.PersonId = row.find("td:eq(0) option:selected").val();
+            CP.DateReg = "1395";
+            CP.TimeReg = "12:00";
+            alert(CP.DateReg);
+            CP.RatingId = row.find("td:eq(1) option:selected").val();
+            CP.CurrentStateId = 1;
+            CPs.push(CP);
+        });
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url:  '@Url.Action("AddTransitInfoList", "Transit", new { Area = "Transit" })',
+            data: JSON.stringify(CPs),
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                alert("اطلاعات با موفقیت ثبت شد.");
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
+                }
+            }
+        });
+    });
+</script>

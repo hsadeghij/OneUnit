@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+@inject SignInManager<StoreUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrators"))
+{
+    <form asp-controller="Account" asp-area="Admin" asp-action="Logout" id="logoutForm" method="post" class="navbar-left">
+        <ul class="nav navbar-nav navbar-left">
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            <li>@await Component.InvokeAsync("AdminMenu")</li> 
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-left">
+        @*  <li><a id="registerLink" asp-controller="Account" asp-area="Admin"  asp-action="Register">Register</a></li>*@
+        <li><a id="loginLink" asp-controller="Account" asp-area="Admin" asp-action="Login">Log in</a></li>
+    </ul>
+}
+
+
+
+

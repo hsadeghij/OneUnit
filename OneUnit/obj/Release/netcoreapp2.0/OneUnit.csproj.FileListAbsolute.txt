@@ -1,0 +1,11 @@
+E:\Projects\Tree\OneUnit\OneUnit\bin\Release\netcoreapp2.0\OneUnit.deps.json
+E:\Projects\Tree\OneUnit\OneUnit\bin\Release\netcoreapp2.0\OneUnit.runtimeconfig.json
+E:\Projects\Tree\OneUnit\OneUnit\bin\Release\netcoreapp2.0\OneUnit.runtimeconfig.dev.json
+E:\Projects\Tree\OneUnit\OneUnit\bin\Release\netcoreapp2.0\OneUnit.dll
+E:\Projects\Tree\OneUnit\OneUnit\bin\Release\netcoreapp2.0\OneUnit.pdb
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.csprojAssemblyReference.cache
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.csproj.CoreCompileInputs.cache
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.AssemblyInfoInputs.cache
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.AssemblyInfo.cs
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.dll
+E:\Projects\Tree\OneUnit\OneUnit\obj\Release\netcoreapp2.0\OneUnit.pdb

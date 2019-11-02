@@ -1,0 +1,25 @@
+﻿@model SamplingLocationViewModel
+
+<form asp-action="AddEditSamplingLocation" asp-area="QC" role="form">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(@Model.Id == 0 ? "Add" : "Edit")} SamplingLocation" })
+    <h1>ویرایش محل نمونه برداری</h1>
+    <div class="well" align="right">
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Name)
+            @Html.EditorFor(n => n.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(n => n.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.Company)
+            @Html.DropDownListFor(n => n.CompanyId, new SelectList(ViewBag.Company, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.CompanyId, "", new { @class = "text-danger" })
+        </div>
+        <div class="well" align="right">
+            @Html.LabelFor(n => n.ProcessName)
+            @Html.DropDownListFor(n => n.ProcessNameId, new SelectList(ViewBag.ProcessName, "Id", "Name"), "انتخاب کنید", new { @class = "form-control" })
+            @Html.ValidationMessageFor(n => n.ProcessNameId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>
+

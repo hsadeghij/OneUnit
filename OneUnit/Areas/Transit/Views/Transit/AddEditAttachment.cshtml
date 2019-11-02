@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Attachment>
+@{
+    ViewBag.Title = "Add NewProduct";
+}
+
+
+<div class="container">
+    <h2>Add New Image</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form id="AddEditAttachment" method="post" enctype="multipart/form-data" onsubmit="return AjaxPost(this)">
+                <select id="ProjectPlanForLoad" name="ProjectPlanId" class="ProjectPlan form-control" onchange="theFunction();">
+                    <option>انتخاب</option>
+                </select>
+                <span class="error">مقدار وارد کنید</span>
+                <br />
+                <lable>Title</lable><br />
+                <input id="Description" name="Description" class="from-control" placeholder="Description Name" />
+                <lable>Title</lable><br />
+                <input id="ImageUpload" name="ImageUpload" class="from-control" type="file" />
+                <button class="btn btn-danger">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+<br /><br /><br />
+@*<div class="container">
+        <h2 class="text-center">Product List</h2>
+        @foreach (var item in Model)
+        {
+
+            <div class="col-md-3" style="margin-bottom:25px">
+                <div class="thumbnail">
+                    <div class="image" style="margin-bottom:20px">
+                        <img class="img-responsive" src="~/Images/Transit/@item.PicUrl" height="350" width="240" />
+                    </div>
+                    <div class="caption" style="border-top:3px solid #ff6a00 ">
+                        <h3><a href="#">@item.Description</a></h3>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>*@
+<table class="table table-bordered table-striped table-condensed">
+     
+    <thead>
+        <tr>
+            <th>توضیحات</th>
+            <th>عکس</th>
+        </tr>
+    </thead>
+    <tbody id="contacts">
+
+    </tbody>
+</table>
+<script>
+    function AjaxPost(formData) {
+
+        var ajaxConfig = {
+            type: "post",
+            url:  '@Url.Action("SaveData", "Transit", new { Area = "Transit" })',
+            data: new FormData(formData),
+            success: function (result) {
+                alert(result);
+                window.location.href =  '@Url.Action("AddEditAttachment", "Transit", new { Area = "Transit" })'
+            }
+        }
+        if ($(formData).attr('enctype') == "multipart/form-data") {
+            ajaxConfig["contentType"] = false;
+            ajaxConfig["processData"] = false;
+            $.ajax(ajaxConfig);
+            return false;
+        }
+    }
+
+
+  //----------------------------------------ProjectPlan--------------------------------------------
+    var ProjectPlanypeIdState;
+    var ProjectPlans = []
+    //fetch Shifts from database
+    function LoadProjectPlan(element) {
+
+        if (ProjectPlans.length == 0) {
+
+            //ajax function for fetch data
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetProjectPlanWithJson", "Transit", new { Area = "Transit" })',
+            success: function (data) {
+                ProjectPlans = data;
+                renderCompany(element);
+            }
+            })
+            }
+            else {
+            //render catagory to the element
+            renderCompany(element);
+            }
+            }
+
+    function renderCompany(element) {
+
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('انتخاب'));
+            $.each(ProjectPlans, function (i, val) {
+            $ele.append($('<option />').val(val.Id).text(val.Activity));
+            })
+    }
+    //----------------------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------------------------
+    LoadProjectPlan($('#ProjectPlanForLoad'));
+
+
+</script>
+<script type="text/javascript">
+    function theFunction() {
+        var image1 = 'https://image.flaticon.com/teams/slug/freepik.jpg';
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAllAttachmentForShow", "Transit", new { Area = "Transit" })',
+            data: { 'Value1': $('#ProjectPlanForLoad').val()},
+            success: function (data) {
+                var row = "";
+                $.each(data, function (id, Attachment) {
+                    image1 = '/Images/Transit/' + Attachment.PicUrl
+                    row += "<tr><td>" + Attachment.Description + "</td>" + "<td>" + '<img  src=' + image1 +' height="350" width = "240" /> ' + "</td>" + "</tr>"
+                });
+                $("#contacts").html(row);
+            }
+        });
+    }
+</script>

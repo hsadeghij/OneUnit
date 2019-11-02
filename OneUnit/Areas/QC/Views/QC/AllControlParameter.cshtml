@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ControlParameter>
+@{
+
+    ViewData["Title"] = "پارامتر کنترلی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="top-buffer"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head">پارامتر کنترلی</div>
+    <div class="panel-body">
+        <div class="btn-group">
+            
+                <i class="glyphicon glyphicon-plus"></i> @Html.ActionLink("درج جدید", "DynamicControlParameter", "QC")
+
+        </div>
+        <div class="top-buffer"></div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>نام فرآیند</th>
+                    <th>پارامتر کنترلی</th>
+                    <th>نوع فرآیند</th>
+                    <th>حد پایین</th>
+                    <th>حد بالا</th>
+                    <th>درجه اهمیت</th>
+                    <th>واحد اندازه گیری</th>
+                    <th>محل نمونه برداری</th>
+                    <th>مقدار نمونه</th>
+                    <th>مقدار آزمونه</th>
+                    <th>مسئول اصلاح و اقدام</th>
+                    <th>شرکت</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ProcessName.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProcessType.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BottomLimit)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UpperLimit)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DegreeOfImportance.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UnitOfMeasurement.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SamplingLocation.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SampleValue.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TestValue.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RAction.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
+                    <td>
+                        <a id="editStudentModal" data-toggle="modal" asp-action="AddEditControlParameter" asp-area="QC" asp-route-id="@item.Id" data-target="#modal-action-student"
+                           class="btn btn-info">
+                            <i class="glyphicon glyphicon-pencil"></i>  ویرایش
+                        </a>
+                        <a id="deleteStudentModal" data-toggle="modal" asp-action="DeleteControlParameter" asp-area="QC" asp-route-id="@item.Id" data-target="#modal-action-student" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-trash"></i>  حذف
+                        </a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-student", AreaLabeledId = "modal-action-student-label", Size = ModalSize.Medium })
+
+@section scripts
+    {
+    <script src="~/js/student-index.js" asp-append-version="true"></script>
+}

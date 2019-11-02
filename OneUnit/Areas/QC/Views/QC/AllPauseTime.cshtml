@@ -1,0 +1,105 @@
+﻿@model IEnumerable<PauseTime>
+@{
+
+    ViewData["Title"] = "وقفه خط";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="top-buffer"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head"> وقفه خط</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="sr-only" for="exampleInput3">تاریخ</label>
+            <div class="input-group">
+                <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#exampleInput3">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+                <input type="text" class="form-control" id="exampleInput3" placeholder="تاریخ" data-targetselector="#exampleInput3" data-mddatetimepicker="true"
+                       data-placement="right" data-englishnumber="true" />
+
+            </div>
+        </div>
+        @*asp-action="DynamicFormQualityDesign" asp-area="QC"*@
+        <div class="btn-group">
+            <a id="btnSave" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunction();">
+                <i class="glyphicon glyphicon-plus"></i>  درج جدید
+
+            </a>
+        </div>
+        <div class="btn-group">
+            <a id="btnSavee" data-target="#modal-action-student" class="btn btn-primary" onclick="return theFunctionn();">
+                <i class="glyphicon glyphicon-plus"></i>  نمایش
+
+            </a>
+        </div>
+        <div class="top-buffer"></div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>سایت</th>
+                    <th>تاریخ وقفه</th>
+                    <th>مدت وقفه</th>
+
+                </tr>
+            </thead>
+            <tbody id="contacts"></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-student", AreaLabeledId = "modal-action-student-label", Size = ModalSize.Medium })
+
+@section scripts
+    {
+    <script src="~/js/student-index.js" asp-append-version="true"></script>
+}
+
+<script type="text/javascript">
+    function theFunction() {
+        // return true or false, depending on whether you want to allow the `href` property to follow through or not
+        var DateInputLoad = $("#exampleInput3").val();
+
+$.ajax({
+           type: 'POST',
+           dataType: 'json',
+           url: '@Url.Action("PassDateForPauseTime", "QC", new { Area = "QC" })',
+           data: { TempDate: DateInputLoad },
+           success: function (data) {
+               window.location.href = data;
+
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+               alert("خطا در عملیات");
+           }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function theFunctionn() {
+        $.ajax({
+
+            type: "GET",
+            url: '@Url.Action("GetAllPauseTimeWithDate", "QC", new { Area = "QC" })',
+            data: { "DateQD": $('#exampleInput3').val() },
+            success: function (data) {
+                var row = "";
+                $.each(data, function (id, PauseTime) {
+
+
+
+                    row += "<tr><td>" + PauseTime.BreakDate + "</td>" + "<td>" + PauseTime.Hour.Name + "</td>" + "<td>" + PauseTime.Company.Name + "</td>" + "</tr>"
+
+                });
+                $("#contacts").html(row);
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve books.');
+            }
+        });
+
+    }
+
+</script>
